@@ -1,37 +1,15 @@
 import React from "react";
 
 export default class Login extends React.Component {
-  state = {
-    username: "",
-    password: "",
-  };
-
-  handleChange = (e) => {
-    let { name, value } = e.target;
-    this.setState({
-      [name]: value,
-    });
-  };
-
   render() {
     return (
       <div className="Login">
-        <form onSubmit={(e) => this.props.handleLogin(e, this.state)}>
+        <form onSubmit={(e) => this.props.handleLogin(e)}>
           <label>Username</label>
-          <input
-            type="text"
-            name="username"
-            value={this.state.username}
-            onChange={this.handleChange}
-          />
+          <input type="text" name="username" />
           <br />
           <label>Password</label>
-          <input
-            type="password"
-            name="password"
-            value={this.state.password}
-            onChange={this.handleChange}
-          />
+          <input type="password" name="password" />
           <br />
           <input type="submit" value="Submit" />
         </form>

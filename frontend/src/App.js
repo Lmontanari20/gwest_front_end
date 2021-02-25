@@ -7,29 +7,22 @@ import Signup from "./components/Signup.js";
 import Battles from "./components/Battles.js";
 import Cards from "./components/Cards.js";
 import Record from "./components/Record.js";
+import history from "./history.js";
 import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
-class App extends React.Component {
-  state = {
-    username: "",
-    password: "",
-    error: "",
-  };
+import { connect } from "react-redux";
+import { login, logout } from "./redux/gwestActions.js";
 
+class App extends React.Component {
   //function that handles authorization response data from login and signup functions
   handleAuthResponse = (data) => {
     if (data.username) {
       const { username, id, token } = data;
+      history.push("/cards");
 
-      this.setState({
-        username: {
-          username,
-          id,
-        },
-        error: null,
-      });
+      this.props.login(username, id);
 
       localStorage.setItem("token", token);
-      // this.props.history.push("/paintings");
+      debugger;
     } else if (data.error) {
       this.setState({
         error: data.error,
@@ -38,15 +31,19 @@ class App extends React.Component {
   };
 
   // function that handles the login functionality
-  handleLogin = (e, userInfo) => {
+  handleLogin = (e) => {
     e.preventDefault();
+    debugger;
     fetch("http://localhost:3000/login", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
         "Accepts": "application/json",
       },
-      body: JSON.stringify(userInfo),
+      body: JSON.stringify({
+        username: e.target.username.value,
+        password: e.target.password.value,
+      }),
     })
       .then((resp) => resp.json())
       .then((data) => this.handleAuthResponse(data))
@@ -63,7 +60,10 @@ class App extends React.Component {
         "Content-Type": "application/json",
         "Accepts": "application/json",
       },
-      body: JSON.stringify({ user: userInfo }),
+      body: JSON.stringify({
+        username: e.target.username.value,
+        password: e.target.password.value,
+      }),
     })
       .then((resp) => resp.json())
       .then((data) => {
@@ -93,5 +93,17 @@ class App extends React.Component {
     );
   }
 }
+const mapStateToProps = (state) => {
+  debugger;
+  return {
+    username: state.username,
+  };
+};
+const mapDispatchToProps = (dispatch) => {
+  return {
+    login: (username, id) => dispatch(login(username, id)),
+    logout: (username) => dispatch(logout(username)),
+  };
+};
 
-export default App;
+export default connect(mapStateToProps, mapDispatchToProps)(App);

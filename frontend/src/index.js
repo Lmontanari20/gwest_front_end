@@ -4,11 +4,21 @@ import "./index.css";
 import App from "./App";
 import reportWebVitals from "./reportWebVitals";
 import { BrowserRouter as Router } from "react-router-dom";
+import { createStore } from "redux";
+import { gwestReducer } from "./redux/gwestReducer.js";
+import { Provider } from "react-redux";
+
+const store = createStore(
+  gwestReducer,
+  window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__()
+);
 
 ReactDOM.render(
-  <Router>
-    <App />
-  </Router>,
+  <Provider store={store}>
+    <Router>
+      <App />
+    </Router>
+  </Provider>,
   document.getElementById("root")
 );
 

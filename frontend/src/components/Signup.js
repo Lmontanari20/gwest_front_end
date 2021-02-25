@@ -1,37 +1,15 @@
 import React from "react";
 
 class Signup extends React.Component {
-  state = {
-    username: "",
-    password: "",
-  };
-
-  handleChange = (e) => {
-    let { name, value } = e.target;
-    this.setState({
-      [name]: value,
-    });
-  };
-
   render() {
     return (
       <div className="Signup">
-        <form onSubmit={(e) => this.props.handleSignup(e, this.state)}>
+        <form onSubmit={this.props.handleSignup}>
           <label>Username</label>
-          <input
-            type="text"
-            name="username"
-            value={this.state.username}
-            onChange={this.handleChange}
-          />
+          <input type="text" name="username" />
           <br />
           <label>Password</label>
-          <input
-            type="password"
-            name="password"
-            value={this.state.password}
-            onChange={this.handleChange}
-          />
+          <input type="password" name="password" />
           <br />
           <input type="submit" value="Submit" />
         </form>
