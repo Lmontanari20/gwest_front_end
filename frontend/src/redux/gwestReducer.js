@@ -12,6 +12,7 @@ export const gwestReducer = (state = initialState, action) => {
         userID: action.payload.id,
       };
     case "LOGOUT":
+      localStorage.removeItem("token");
       return {
         ...state,
         username: null,

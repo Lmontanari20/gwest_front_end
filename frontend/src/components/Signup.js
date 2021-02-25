@@ -1,20 +1,52 @@
 import React from "react";
+import { connect } from "react-redux";
+import { login, logout } from "./../redux/gwestActions.js";
 
-class Signup extends React.Component {
-  render() {
-    return (
-      <div className="Signup">
-        <form onSubmit={this.props.handleSignup}>
-          <label>Username</label>
-          <input type="text" name="username" />
-          <br />
-          <label>Password</label>
-          <input type="password" name="password" />
-          <br />
-          <input type="submit" value="Submit" />
-        </form>
-      </div>
-    );
-  }
-}
-export default Signup;
+const Signup = (props) => {
+  // function that handles the signup functionality
+  const handleSignup = (e, userInfo) => {
+    e.preventDefault();
+
+    fetch("http://localhost:3000/signup", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        "Accepts": "application/json",
+      },
+      body: JSON.stringify({
+        username: e.target.username.value,
+        password: e.target.password.value,
+      }),
+    })
+      .then((resp) => resp.json())
+      .then((data) => {
+        // if data.username else if data.error
+        props.login(data.username, data.id);
+        localStorage.setItem("token", data.token);
+        props.history.push("/record");
+      })
+      .catch(console.log);
+  };
+
+  return (
+    <div className="Signup">
+      <form onSubmit={handleSignup}>
+        <label>Username</label>
+        <input type="text" name="username" />
+        <br />
+        <label>Password</label>
+        <input type="password" name="password" />
+        <br />
+        <input type="submit" value="Submit" />
+      </form>
+    </div>
+  );
+};
+const mapDispatchToProps = (dispatch) => {
+  return {
+    login: (username, id) => dispatch(login(username, id)),
+    logout: (username) => dispatch(logout(username)),
+  };
+};
+
+export default connect(null, mapDispatchToProps)(Signup);
