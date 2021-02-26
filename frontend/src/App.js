@@ -8,13 +8,7 @@ import Battles from "./components/Battles.js";
 import Cards from "./components/Cards.js";
 import Record from "./components/Record.js";
 import { withRouter } from "react-router-dom";
-
-import {
-  BrowserRouter as Router,
-  Route,
-  Switch,
-  Redirect,
-} from "react-router-dom";
+import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
 import { connect } from "react-redux";
 import { login, logout } from "./redux/gwestActions.js";
 

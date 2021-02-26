@@ -1,6 +1,8 @@
 const initialState = {
   username: null,
   userID: null,
+  battles: null,
+  battle: null,
 };
 
 export const gwestReducer = (state = initialState, action) => {
@@ -17,6 +19,11 @@ export const gwestReducer = (state = initialState, action) => {
         ...state,
         username: null,
         userID: null,
+      };
+    case "ALLBATTLES":
+      return {
+        ...state,
+        battles: action.payload,
       };
     default:
       return state;

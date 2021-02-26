@@ -12,15 +12,19 @@ const NavBar = (props) => {
         <Navbar.Toggle aria-controls="basic-navbar-nav" />
         <Navbar.Collapse id="basic-navbar-nav">
           <Nav className="mr-auto">
-            <LinkContainer exact to="/battles">
-              <Nav.Link>Battles</Nav.Link>
-            </LinkContainer>
-            <LinkContainer exact to="/cards">
-              <Nav.Link>Cards</Nav.Link>
-            </LinkContainer>
-            <LinkContainer exact to="/record">
-              <Nav.Link>Record</Nav.Link>
-            </LinkContainer>
+            {props.username !== null && (
+              <Fragment>
+                <LinkContainer exact to="/battles">
+                  <Nav.Link>Battles</Nav.Link>
+                </LinkContainer>
+                <LinkContainer exact to="/cards">
+                  <Nav.Link>Cards</Nav.Link>
+                </LinkContainer>
+                <LinkContainer exact to="/record">
+                  <Nav.Link>Record</Nav.Link>
+                </LinkContainer>
+              </Fragment>
+            )}
           </Nav>
           <Nav>
             {props.username === null ? (

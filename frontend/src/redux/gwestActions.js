@@ -14,3 +14,10 @@ export const logout = (username) => {
     payload: username,
   };
 };
+
+export const addBattles = (battles) => {
+  return {
+    type: "ALLBATTLES",
+    payload: battles,
+  };
+};
