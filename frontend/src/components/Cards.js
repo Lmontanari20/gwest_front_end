@@ -16,7 +16,7 @@ const Cards = ({ username, userID, cards, deck, addCards }) => {
     }
     return cards.map((card) => {
       return (
-        <Card key={`${card.id}`}>
+        <Card key={`${card.id}`} onClick={() => handleClick(card.id)}>
           <Card.Body>
             <Card.Title>{card.name}</Card.Title>
             <Card.Subtitle>Class: {card.cardClass}</Card.Subtitle>
@@ -33,7 +33,7 @@ const Cards = ({ username, userID, cards, deck, addCards }) => {
     }
     return deck.map((card) => {
       return (
-        <Card key={`${card.id}`}>
+        <Card key={`${card.id}`} onClick={() => handleClick(card.id)}>
           <Card.Body>
             <Card.Title>{card.name}</Card.Title>
             <Card.Subtitle>Class: {card.cardClass}</Card.Subtitle>
@@ -42,6 +42,18 @@ const Cards = ({ username, userID, cards, deck, addCards }) => {
         </Card>
       );
     });
+  };
+
+  const handleClick = (id) => {
+    fetch(`http://localhost:3000/card/${userID}/${id}`, {
+      method: "PATCH",
+      headers: {
+        "Content-Type": "application/json",
+        "Accepts": "application/json",
+      },
+    })
+      .then((res) => res.json())
+      .then((cards) => addCards(cards));
   };
 
   return (

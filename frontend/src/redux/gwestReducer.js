@@ -28,6 +28,7 @@ export const gwestReducer = (state = initialState, action) => {
         battles: action.payload,
       };
     case "ADDCARDS":
+      debugger;
       let deckCards = action.payload.filter((card) => card.indeck);
       let cards = action.payload.filter((card) => !card.indeck);
       return {
