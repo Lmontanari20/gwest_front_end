@@ -21,3 +21,10 @@ export const addBattles = (battles) => {
     payload: battles,
   };
 };
+
+export const addCards = (cards) => {
+  return {
+    type: "ADDCARDS",
+    payload: cards,
+  };
+};

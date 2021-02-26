@@ -10,7 +10,7 @@ const Record = (props) => {
       .then((battles) => {
         props.addBattles(battles);
       });
-  });
+  }, []);
 
   const mapBattlesToCards = () => {
     let battles = props.battles;
