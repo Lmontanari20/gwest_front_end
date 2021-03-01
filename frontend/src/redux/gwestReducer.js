@@ -5,6 +5,27 @@ const initialState = {
   battle: null,
   cards: null,
   deck: null,
+  cardsAvailable: null,
+  aiDeck: null,
+  aiCardsAvailable: null,
+  inGame: false,
+  roundCount: 0,
+  round1Win: null,
+  round2Win: null,
+  round3Win: null,
+  userTurn: false,
+  aiBoard: {
+    melee: null,
+    range: null,
+    siege: null,
+  },
+  userBoard: {
+    melee: null,
+    range: null,
+    siege: null,
+  },
+  aiPass: false,
+  userPass: false,
 };
 
 export const gwestReducer = (state = initialState, action) => {
@@ -35,6 +56,46 @@ export const gwestReducer = (state = initialState, action) => {
         ...state,
         cards: cards,
         deck: deckCards,
+      };
+    case "STARTGAME":
+      return {
+        ...state,
+        inGame: true,
+      };
+    case "NEXTROUND":
+      return {
+        ...state,
+        roundCount: state.roundCount++,
+      };
+    case "ROUND1WINNER":
+      return {
+        ...state,
+        round1Win: action.payload,
+      };
+    case "ROUND2WINNER":
+      return {
+        ...state,
+        round2Win: action.payload,
+      };
+    case "ROUND3WINNER":
+      return {
+        ...state,
+        round3Win: action.payload,
+      };
+    case "USERTURN":
+      return {
+        ...state,
+        userTurn: !state.userTurn,
+      };
+    case "AIBOARDMOVE":
+      return {
+        ...state,
+        aiBoard: {
+          [action.payload.class]: [
+            ...state.aiBoard[action.payload.class],
+            action.payload.card,
+          ],
+        },
       };
     default:
       return state;
