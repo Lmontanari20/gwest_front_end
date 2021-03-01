@@ -29,8 +29,8 @@ export const gwestReducer = (state = initialState, action) => {
       };
     case "ADDCARDS":
       debugger;
-      let deckCards = action.payload.filter((card) => card.indeck);
-      let cards = action.payload.filter((card) => !card.indeck);
+      let deckCards = action.payload.filter((uCard) => uCard.indeck);
+      let cards = action.payload.filter((uCard) => !uCard.indeck);
       return {
         ...state,
         cards: cards,
