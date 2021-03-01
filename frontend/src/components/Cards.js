@@ -1,6 +1,5 @@
 import React, { useEffect } from "react";
 import { Card } from "react-bootstrap";
-import { propTypes } from "react-bootstrap/esm/Image";
 import { connect } from "react-redux";
 import { addCards } from "./../redux/gwestActions.js";
 

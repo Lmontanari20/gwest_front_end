@@ -62,6 +62,11 @@ export const gwestReducer = (state = initialState, action) => {
         ...state,
         inGame: true,
       };
+    case "ENDGAME":
+      return {
+        ...state,
+        inGame: false,
+      };
     case "NEXTROUND":
       return {
         ...state,
@@ -96,6 +101,21 @@ export const gwestReducer = (state = initialState, action) => {
             action.payload.card,
           ],
         },
+      };
+    case "AIDECK":
+      return {
+        ...state,
+        aiDeck: action.payload,
+      };
+    case "AIAVAILABLE":
+      return {
+        ...state,
+        aiCardsAvailable: action.payload,
+      };
+    case "CARDSAVAILABLE":
+      return {
+        ...state,
+        cardsAvailable: action.payload,
       };
     default:
       return state;

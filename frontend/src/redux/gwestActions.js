@@ -28,3 +28,38 @@ export const addCards = (cards) => {
     payload: cards,
   };
 };
+
+export const aiDeck = (cards) => {
+  return {
+    type: "AIDECK",
+    payload: cards,
+  };
+};
+
+export const aiAvailable = (cards) => {
+  return {
+    type: "AIAVAILABLE",
+    payload: cards,
+  };
+};
+
+export const startGame = () => {
+  return {
+    type: "STARTGAME",
+    payload: null,
+  };
+};
+
+export const endGame = () => {
+  return {
+    type: "ENDGAME",
+    payload: null,
+  };
+};
+
+export const cardsAvailable = (cards) => {
+  return {
+    type: "CARDSAVAILABLE",
+    payload: cards,
+  };
+};
