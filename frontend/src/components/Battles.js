@@ -1,4 +1,4 @@
-import React, { Fragment } from "react";
+import React, { Fragment, useEffect } from "react";
 import { connect } from "react-redux";
 import {
   addBattles,
@@ -10,14 +10,18 @@ import {
 } from "./../redux/gwestActions.js";
 
 const Battles = (props) => {
-  const startGame = () => {
+  useEffect(() => {
+    getCardsAvailable();
     getAIDECK();
+  }, []);
+
+  const startGame = () => {
     if (props.inGame) {
+      // end game for debugging purposes
       props.endGame();
       return;
     }
     props.startGame();
-    getCardsAvailable();
     // render ai board,
     // render user board and user cards available with onclick function
   };
@@ -55,7 +59,6 @@ const Battles = (props) => {
   };
 
   const getAIDECK = () => {
-    debugger;
     fetch("http://localhost:3000/card/ai/deck")
       .then((res) => res.json())
       .then((cards) => {
@@ -75,7 +78,6 @@ const Battles = (props) => {
     }
     props.aiAvailable(available);
   };
-
   return (
     <Fragment>
       <div className="game-start" style={{ textAlign: "center" }}>
@@ -83,14 +85,104 @@ const Battles = (props) => {
         <h5>Make sure you put cards in your deck!!</h5>
         <button onClick={startGame}>Play</button>
       </div>
-      <div className="board" style={{ display: "flex" }}>
-        <div style={{ flex: "1" }}>user/ai stuff</div>
-        <div style={{ flex: "1" }}>
-          <div>ai gameboard</div>
-          <div>user gameboard</div>
+      {props.inGame && (
+        <div className="board" style={{ display: "flex" }}>
+          <div style={{ flex: "1" }}>
+            <div style={{ border: "3px solid black", width: "50%" }}>
+              <p>Opponent name</p>
+              <p>Opponent difficulty</p>
+              <p>Cards left: {props.aiCardsAvailable.length}</p>
+            </div>
+            <div
+              style={{
+                border: "3px solid black",
+                marginTop: "200px",
+                marginBottom: "200px",
+                width: "50%",
+              }}
+            >
+              <p>weather cards</p>
+            </div>
+            <div style={{ border: "3px solid black", width: "50%" }}>
+              <h4>{props.username}</h4>
+              <p>Cards left: {props.userCardsAvailable.length}</p>
+            </div>
+          </div>
+          <div style={{ flex: "1" }}>
+            <div>
+              melee
+              <div style={{ border: "5px solid black" }}>AI melee cards</div>
+              range
+              <div style={{ border: "5px solid black" }}>AI range cards</div>
+              siege
+              <div style={{ border: "5px solid black" }}>AI siege cards</div>
+            </div>
+            <div>
+              user gameboard
+              <div>
+                melee
+                <div style={{ border: "5px solid black" }}>
+                  user melee cards
+                </div>
+                range
+                <div style={{ border: "5px solid black" }}>
+                  user range cards
+                </div>
+                siege
+                <div style={{ border: "5px solid black" }}>
+                  user siege cards
+                </div>
+              </div>
+            </div>
+          </div>
+          <div style={{ flex: "1" }}>
+            <div style={{ display: "flex" }}>
+              <div
+                style={{
+                  flex: "1",
+                  border: "3px solid black",
+                  width: "100px",
+                  marginLeft: "200px",
+                }}
+              >
+                discard
+              </div>
+              <div
+                style={{
+                  flex: "1",
+                  border: "3px solid black",
+                  width: "100px",
+                  marginRight: "200px",
+                }}
+              >
+                deck
+              </div>
+            </div>
+            <div style={{ display: "flex", marginTop: "500px" }}>
+              <div
+                style={{
+                  flex: "1",
+                  border: "3px solid black",
+                  width: "100px",
+                  marginLeft: "200px",
+                }}
+              >
+                discard
+              </div>
+              <div
+                style={{
+                  flex: "1",
+                  border: "3px solid black",
+                  width: "100px",
+                  marginRight: "200px",
+                }}
+              >
+                deck
+              </div>
+            </div>
+          </div>
         </div>
-        <div style={{ flex: "1" }}> discard/deck piles</div>
-      </div>
+      )}
     </Fragment>
   );
 };
@@ -100,7 +192,7 @@ const mapStateToProps = (state) => {
     username: state.username,
     userID: state.userID,
     deck: state.deck,
-    cardsAvailable: state.cardsAvailable,
+    userCardsAvailable: state.userCardsAvailable,
     battle: state.deck,
     aiDeck: state.aiDeck,
     aiCardsAvailable: state.aiCardsAvailable,

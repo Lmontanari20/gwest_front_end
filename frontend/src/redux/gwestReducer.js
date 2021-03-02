@@ -5,7 +5,7 @@ const initialState = {
   battle: null,
   cards: null,
   deck: null,
-  cardsAvailable: null,
+  userCardsAvailable: null,
   aiDeck: null,
   aiCardsAvailable: null,
   inGame: false,
@@ -49,7 +49,6 @@ export const gwestReducer = (state = initialState, action) => {
         battles: action.payload,
       };
     case "ADDCARDS":
-      debugger;
       let deckCards = action.payload.filter((uCard) => uCard.indeck);
       let cards = action.payload.filter((uCard) => !uCard.indeck);
       return {
@@ -115,7 +114,7 @@ export const gwestReducer = (state = initialState, action) => {
     case "CARDSAVAILABLE":
       return {
         ...state,
-        cardsAvailable: action.payload,
+        userCardsAvailable: action.payload,
       };
     default:
       return state;
