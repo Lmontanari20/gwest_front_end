@@ -112,3 +112,45 @@ export const setUserPass = (pass) => {
     payload: pass,
   };
 };
+
+export const set1Win = (winner) => {
+  return {
+    type: "ROUND1WINNER",
+    payload: winner,
+  };
+};
+
+export const set2Win = (winner) => {
+  return {
+    type: "ROUND2WINNER",
+    payload: winner,
+  };
+};
+
+export const set3Win = (winner) => {
+  return {
+    type: "ROUND3WINNER",
+    payload: winner,
+  };
+};
+
+export const set1Score = (score) => {
+  return {
+    type: "ROUND1SCORE",
+    payload: score,
+  };
+};
+
+export const set2Score = (score) => {
+  return {
+    type: "ROUND2SCORE",
+    payload: score,
+  };
+};
+
+export const set3Score = (score) => {
+  return {
+    type: "ROUND3SCORE",
+    payload: score,
+  };
+};

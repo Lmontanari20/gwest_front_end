@@ -13,6 +13,9 @@ const initialState = {
   round1Win: null,
   round2Win: null,
   round3Win: null,
+  round1Score: null,
+  round2Score: null,
+  round3Score: null,
   userTurn: false,
   aiBoard: {
     melee: [],
@@ -87,6 +90,21 @@ export const gwestReducer = (state = initialState, action) => {
       return {
         ...state,
         round3Win: action.payload,
+      };
+    case "ROUND1SCORE":
+      return {
+        ...state,
+        round1Score: action.payload,
+      };
+    case "ROUND2SCORE":
+      return {
+        ...state,
+        round2Score: action.payload,
+      };
+    case "ROUND3SCORE":
+      return {
+        ...state,
+        round3Score: action.payload,
       };
     case "USERTURN":
       return {

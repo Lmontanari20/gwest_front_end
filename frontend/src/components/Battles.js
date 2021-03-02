@@ -15,6 +15,12 @@ import {
   changeUserBoard,
   setUserPass,
   setAIPass,
+  set1Score,
+  set2Score,
+  set3Score,
+  set1Win,
+  set2Win,
+  set3Win,
 } from "./../redux/gwestActions.js";
 
 const Battles = (props) => {
@@ -35,12 +41,6 @@ const Battles = (props) => {
     // render user board and user cards available with onclick function
   };
 
-  const resetRound = () => {
-    props.changeUserBoard({ melee: [], ranged: [], siege: [] });
-    props.changeAIBoard({ melee: [], ranged: [], siege: [] });
-    props.aiPoints(0);
-    props.userPoints(0);
-  };
   const gameTurn = (card) => {
     // if(both ai and player have not passed and both have cards available length greater than 0)
     //    card attack is added to the current players turns total
@@ -51,6 +51,72 @@ const Battles = (props) => {
     //    if round 1 update round state, round1win,  reset board, ai/userpass,
     //    if round 2 update round2win, check both winners see if theres a winner, if not reset board, ai/userpass
     //    if round 3 get winner, create battle fetch, redirect
+  };
+
+  const aiTurn = () => {
+    debugger;
+    // if (props.userTurn) {
+    //   return;
+    // }
+    checkRoundEnd();
+    if (props.userPass && props.userPoints < props.aiPoints) {
+      // make ai pass
+      props.setAIPass(true);
+      checkRoundEnd();
+    } else {
+      // grab random card and display on board, delete from available
+      let card =
+        props.aiCardsAvailable[
+          Math.floor(Math.random() * props.aiCardsAvailable.length)
+        ];
+      // add card to game board
+      let newBoard = props.aiBoard;
+      let index = card.cardClass;
+      newBoard[index].push(card);
+      props.changeAIBoard(newBoard);
+      // change cards available
+      let newAvailable = props.aiCardsAvailable.filter(
+        (uCard) => uCard.id !== card.id
+      );
+      props.aiAvailable(newAvailable);
+      // set points and change turn to users turn
+      props.setAIPoints(props.aiPoints + card.attack);
+      if (props.userPass) {
+        aiTurn();
+      }
+    }
+  };
+
+  const startTurn = (e, card) => {
+    if (!props.userTurn) {
+      return;
+    }
+    // add card to game board
+    let newBoard = props.userBoard;
+    let index = card.card.cardClass;
+    newBoard[index].push(card);
+    props.changeUserBoard(newBoard);
+    // remove card from available
+    let newAvailable = props.userCardsAvailable.filter(
+      (uCard) => uCard.card.id !== card.card.id
+    );
+    props.cardsAvailable(newAvailable);
+    //set user points
+    props.setUserPoints(props.userPoints + card.card.attack);
+    aiTurn();
+  };
+
+  const checkRoundEnd = () => {
+    if (
+      (props.userPass && props.aiPass) ||
+      (props.aiCardsAvailable.length === 0 &&
+        props.userCardsAvailable.length === 0) ||
+      (props.userPass && props.aiCardsAvailable.length === 0) ||
+      (props.aiPass && props.userCardsAvailable.length === 0)
+    ) {
+      setNextRound();
+      checkWin();
+    }
   };
 
   const checkWin = () => {
@@ -68,27 +134,29 @@ const Battles = (props) => {
   };
 
   const setNextRound = () => {
-    // update round state,
-  };
-
-  const startTurn = (e, card) => {
-    if (!props.userTurn) {
-      return;
+    let winner = "";
+    if (props.aiPoints > props.userPoints) {
+      winner = "ai";
+    } else {
+      winner = props.username;
     }
-    // add card to game board
-    let newBoard = props.userBoard;
-    debugger;
-    let index = card.card.cardClass;
-    newBoard[index].push(card);
-    props.changeUserBoard(newBoard);
-    // remove card from available
-    let newAvailable = props.userCardsAvailable.filter(
-      (uCard) => uCard.card.id !== card.card.id
-    );
-    props.cardsAvailable(newAvailable);
-    //set user points
-    props.setUserPoints(props.userPoints + card.card.attack);
-    props.changeUserTurn();
+    if (!props.round1Win) {
+      //set round1Win to winner
+      props.set1Win(winner);
+      props.set1Score(`${props.userPoints}-${props.aiPoints}`);
+    } else if (!props.round2Win) {
+      // set round2Win to winner
+      props.set2Win(winner);
+    } else {
+      // set round3 win to winner
+      props.set3Win(winner);
+    }
+    props.changeUserBoard({ melee: [], ranged: [], siege: [] });
+    props.changeAIBoard({ melee: [], ranged: [], siege: [] });
+    props.aiPoints(0);
+    props.userPoints(0);
+    props.userPass(false);
+    props.aiPass(false);
   };
 
   const getCardsAvailable = () => {
@@ -125,12 +193,11 @@ const Battles = (props) => {
       return (
         <Card
           style={{ width: "35%", margin: "auto", flex: "1" }}
-          key={`${card.card.id}`}
+          key={`${card.id}`}
         >
           <Card.Body>
             <Card.Text>
-              {card.card.name} Class: {card.card.cardClass} Attack:{" "}
-              {card.card.attack}
+              {card.name} Class: {card.cardClass} Attack: {card.attack}
             </Card.Text>
           </Card.Body>
         </Card>
@@ -177,6 +244,11 @@ const Battles = (props) => {
     }
     props.aiAvailable(available);
   };
+
+  const userPass = () => {
+    debugger;
+    props.setUserPass(true);
+  };
   return (
     <Fragment>
       <div className="game-start" style={{ textAlign: "center" }}>
@@ -202,6 +274,7 @@ const Battles = (props) => {
             >
               <p>weather cards</p>
             </div>
+            <button onClick={userPass()}>Pass</button>
             <div style={{ border: "3px solid black", width: "50%" }}>
               <h4>{props.username}</h4>
               <p>Cards left: {props.userCardsAvailable.length}</p>
@@ -312,6 +385,14 @@ const mapStateToProps = (state) => {
     userBoard: state.userBoard,
     aiPoints: state.aiPoints,
     userPoints: state.userPoints,
+    aiPass: state.aiPass,
+    userPass: state.userPass,
+    round1Win: state.round1Win,
+    round2Win: state.round2Win,
+    round3Win: state.round3Win,
+    round1Score: state.round1Score,
+    round2Score: state.round2Score,
+    round3Score: state.round3Score,
   };
 };
 
@@ -328,6 +409,14 @@ const mapDispatchToProps = (dispatch) => {
     changeUserBoard: (board) => dispatch(changeUserBoard(board)),
     setAIPoints: (points) => dispatch(setAIPoints(points)),
     setUserPoints: (points) => dispatch(setUserPoints(points)),
+    setUserPass: (pass) => dispatch(setUserPass(pass)),
+    setAIPass: (pass) => dispatch(setAIPass(pass)),
+    set1Win: (winner) => dispatch(set1Win(winner)),
+    set2Win: (winner) => dispatch(set2Win(winner)),
+    set3Win: (winner) => dispatch(set3Win(winner)),
+    set1Score: (score) => dispatch(set1Score(score)),
+    set2Score: (score) => dispatch(set2Score(score)),
+    set3Score: (score) => dispatch(set3Score(score)),
   };
 };
 
