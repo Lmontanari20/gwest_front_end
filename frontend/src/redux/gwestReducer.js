@@ -15,17 +15,19 @@ const initialState = {
   round3Win: null,
   userTurn: false,
   aiBoard: {
-    melee: null,
-    range: null,
-    siege: null,
+    melee: [],
+    ranged: [],
+    siege: [],
   },
   userBoard: {
-    melee: null,
-    range: null,
-    siege: null,
+    melee: [],
+    ranged: [],
+    siege: [],
   },
   aiPass: false,
   userPass: false,
+  aiPoints: 0,
+  userPoints: 0,
 };
 
 export const gwestReducer = (state = initialState, action) => {
@@ -115,6 +117,36 @@ export const gwestReducer = (state = initialState, action) => {
       return {
         ...state,
         userCardsAvailable: action.payload,
+      };
+    case "CHANGEAIBOARD":
+      return {
+        ...state,
+        aiBoard: action.payload,
+      };
+    case "CHANGEUSERBOARD":
+      return {
+        ...state,
+        userBoard: action.payload,
+      };
+    case "USERPOINTS":
+      return {
+        ...state,
+        userPoints: action.payload,
+      };
+    case "AIPOINTS":
+      return {
+        ...state,
+        aiPoints: action.payload,
+      };
+    case "USERPASS":
+      return {
+        ...state,
+        userPass: action.payload,
+      };
+    case "AIPASS":
+      return {
+        ...state,
+        userPass: action.payload,
       };
     default:
       return state;

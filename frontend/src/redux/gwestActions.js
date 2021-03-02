@@ -63,3 +63,52 @@ export const cardsAvailable = (cards) => {
     payload: cards,
   };
 };
+
+export const changeUserTurn = () => {
+  return {
+    type: "USERTURN",
+    payload: null,
+  };
+};
+
+export const changeAIBoard = (board) => {
+  return {
+    type: "CHANGEAIBOARD",
+    payload: board,
+  };
+};
+
+export const changeUserBoard = (board) => {
+  return {
+    type: "CHANGEUSERBOARD",
+    payload: board,
+  };
+};
+
+export const setAIPoints = (points) => {
+  return {
+    type: "AIPOINTS",
+    payload: points,
+  };
+};
+
+export const setUserPoints = (points) => {
+  return {
+    type: "USERPOINTS",
+    payload: points,
+  };
+};
+
+export const setAIPass = (pass) => {
+  return {
+    type: "AIPASS",
+    payload: pass,
+  };
+};
+
+export const setUserPass = (pass) => {
+  return {
+    type: "USERPASS",
+    payload: pass,
+  };
+};

@@ -1,5 +1,6 @@
 import React, { Fragment, useEffect } from "react";
 import { connect } from "react-redux";
+import { Card } from "react-bootstrap";
 import {
   addBattles,
   aiDeck,
@@ -7,6 +8,13 @@ import {
   startGame,
   endGame,
   cardsAvailable,
+  changeUserTurn,
+  setAIPoints,
+  setUserPoints,
+  changeAIBoard,
+  changeUserBoard,
+  setUserPass,
+  setAIPass,
 } from "./../redux/gwestActions.js";
 
 const Battles = (props) => {
@@ -21,11 +29,18 @@ const Battles = (props) => {
       props.endGame();
       return;
     }
+    props.changeUserTurn();
     props.startGame();
     // render ai board,
     // render user board and user cards available with onclick function
   };
 
+  const resetRound = () => {
+    props.changeUserBoard({ melee: [], ranged: [], siege: [] });
+    props.changeAIBoard({ melee: [], ranged: [], siege: [] });
+    props.aiPoints(0);
+    props.userPoints(0);
+  };
   const gameTurn = (card) => {
     // if(both ai and player have not passed and both have cards available length greater than 0)
     //    card attack is added to the current players turns total
@@ -40,11 +55,40 @@ const Battles = (props) => {
 
   const checkWin = () => {
     // check to see if there is a game winner
+    if (
+      props.round1Win === props.round2Win ||
+      props.round1Win === props.round3Win
+    ) {
+      // alert winner and go to records page
+    } else if (props.round2Win === props.round3Win) {
+      // alert winner and go to records page
+    }
     props.endGame();
+    props.changeUserBoard({ melee: [], range: [], siege: [] });
   };
 
   const setNextRound = () => {
     // update round state,
+  };
+
+  const startTurn = (e, card) => {
+    if (!props.userTurn) {
+      return;
+    }
+    // add card to game board
+    let newBoard = props.userBoard;
+    debugger;
+    let index = card.card.cardClass;
+    newBoard[index].push(card);
+    props.changeUserBoard(newBoard);
+    // remove card from available
+    let newAvailable = props.userCardsAvailable.filter(
+      (uCard) => uCard.card.id !== card.card.id
+    );
+    props.cardsAvailable(newAvailable);
+    //set user points
+    props.setUserPoints(props.userPoints + card.card.attack);
+    props.changeUserTurn();
   };
 
   const getCardsAvailable = () => {
@@ -56,6 +100,61 @@ const Battles = (props) => {
       }
     }
     props.cardsAvailable(available);
+  };
+
+  const mapUserGame = (area) => {
+    return props.userBoard[area].map((card) => {
+      return (
+        <Card
+          style={{ width: "35%", margin: "auto", flex: "1" }}
+          key={`${card.card.id}`}
+        >
+          <Card.Body>
+            <Card.Text>
+              {card.card.name} Class: {card.card.cardClass} Attack:{" "}
+              {card.card.attack}
+            </Card.Text>
+          </Card.Body>
+        </Card>
+      );
+    });
+  };
+
+  const mapAIGame = (area) => {
+    return props.aiBoard[area].map((card) => {
+      return (
+        <Card
+          style={{ width: "35%", margin: "auto", flex: "1" }}
+          key={`${card.card.id}`}
+        >
+          <Card.Body>
+            <Card.Text>
+              {card.card.name} Class: {card.card.cardClass} Attack:{" "}
+              {card.card.attack}
+            </Card.Text>
+          </Card.Body>
+        </Card>
+      );
+    });
+  };
+
+  const mapCardsAvailable = () => {
+    return props.userCardsAvailable.map((card) => {
+      return (
+        <Card
+          style={{ width: "35%", margin: "auto", flex: "1" }}
+          key={`${card.card.id}`}
+          onClick={(e) => startTurn(e, card)}
+        >
+          <Card.Body>
+            <Card.Text>
+              {card.card.name} Class: {card.card.cardClass} Attack:{" "}
+              {card.card.attack}
+            </Card.Text>
+          </Card.Body>
+        </Card>
+      );
+    });
   };
 
   const getAIDECK = () => {
@@ -109,28 +208,39 @@ const Battles = (props) => {
             </div>
           </div>
           <div style={{ flex: "1" }}>
+            <h3>Sherriff Game Board</h3>
             <div>
-              melee
-              <div style={{ border: "5px solid black" }}>AI melee cards</div>
-              range
-              <div style={{ border: "5px solid black" }}>AI range cards</div>
-              siege
-              <div style={{ border: "5px solid black" }}>AI siege cards</div>
+              Melee
+              <div style={{ border: "5px solid black" }}>
+                {mapAIGame("melee")}
+              </div>
+              Range
+              <div style={{ border: "5px solid black" }}>
+                {mapAIGame("ranged")}
+              </div>
+              Siege
+              <div style={{ border: "5px solid black" }}>
+                {mapAIGame("siege")}
+              </div>
             </div>
             <div>
-              user gameboard
+              <br></br>
+              <h3>User Game Board</h3>
               <div>
-                melee
+                Melee
                 <div style={{ border: "5px solid black" }}>
-                  user melee cards
+                  {mapUserGame("melee")}
                 </div>
-                range
+                Range
                 <div style={{ border: "5px solid black" }}>
-                  user range cards
+                  {mapUserGame("ranged")}
                 </div>
-                siege
+                Siege
                 <div style={{ border: "5px solid black" }}>
-                  user siege cards
+                  {mapUserGame("siege")}
+                </div>
+                <div style={{ border: "5px solid black", display: "flex" }}>
+                  {mapCardsAvailable()}
                 </div>
               </div>
             </div>
@@ -197,6 +307,11 @@ const mapStateToProps = (state) => {
     aiDeck: state.aiDeck,
     aiCardsAvailable: state.aiCardsAvailable,
     inGame: state.inGame,
+    userTurn: state.userTurn,
+    aiBoard: state.aiBoard,
+    userBoard: state.userBoard,
+    aiPoints: state.aiPoints,
+    userPoints: state.userPoints,
   };
 };
 
@@ -208,6 +323,11 @@ const mapDispatchToProps = (dispatch) => {
     startGame: () => dispatch(startGame()),
     endGame: () => dispatch(endGame()),
     cardsAvailable: (cards) => dispatch(cardsAvailable(cards)),
+    changeUserTurn: () => dispatch(changeUserTurn()),
+    changeAIBoard: (board) => dispatch(changeAIBoard(board)),
+    changeUserBoard: (board) => dispatch(changeUserBoard(board)),
+    setAIPoints: (points) => dispatch(setAIPoints(points)),
+    setUserPoints: (points) => dispatch(setUserPoints(points)),
   };
 };
 
