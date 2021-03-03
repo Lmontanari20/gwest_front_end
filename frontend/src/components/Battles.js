@@ -25,44 +25,33 @@ import {
 
 const Battles = (props) => {
   useEffect(() => {
-    getCardsAvailable();
-    getAIDECK();
-  }, []);
+    if (props.userPass) {
+      setTimeout(() => aiTurn(), 2000);
+    }
+  });
 
   const startGame = () => {
     if (props.inGame) {
-      // end game for debugging purposes
-      props.endGame();
       return;
     }
+    getCardsAvailable();
+    getAIDECK();
+
     props.changeUserTurn();
     props.startGame();
     // render ai board,
     // render user board and user cards available with onclick function
   };
 
-  const gameTurn = (card) => {
-    // if(both ai and player have not passed and both have cards available length greater than 0)
-    //    card attack is added to the current players turns total
-    //    card is removed from card available and put on board
-    //    set userTurn to be the opposite of what it is
-    // else
-    //    signify the winner and set state
-    //    if round 1 update round state, round1win,  reset board, ai/userpass,
-    //    if round 2 update round2win, check both winners see if theres a winner, if not reset board, ai/userpass
-    //    if round 3 get winner, create battle fetch, redirect
-  };
-
-  const aiTurn = () => {
-    debugger;
-    // if (props.userTurn) {
-    //   return;
-    // }
-    checkRoundEnd();
+  const aiTurn = (pass = false) => {
+    if (props.aiCardsAvailable.length === 0) {
+      props.setAIPass(true);
+      checkRoundEnd();
+      return;
+    }
     if (props.userPass && props.userPoints < props.aiPoints) {
       // make ai pass
       props.setAIPass(true);
-      checkRoundEnd();
     } else {
       // grab random card and display on board, delete from available
       let card =
@@ -81,10 +70,12 @@ const Battles = (props) => {
       props.aiAvailable(newAvailable);
       // set points and change turn to users turn
       props.setAIPoints(props.aiPoints + card.attack);
-      if (props.userPass) {
-        aiTurn();
-      }
+      // if (props.userPass) {
+      //   aiTurn();
+      // }
+      props.changeUserTurn();
     }
+    checkRoundEnd();
   };
 
   const startTurn = (e, card) => {
@@ -103,10 +94,12 @@ const Battles = (props) => {
     props.cardsAvailable(newAvailable);
     //set user points
     props.setUserPoints(props.userPoints + card.card.attack);
-    aiTurn();
+    props.changeUserTurn();
+    setTimeout(() => aiTurn(), 2000);
   };
 
   const checkRoundEnd = () => {
+    debugger;
     if (
       (props.userPass && props.aiPass) ||
       (props.aiCardsAvailable.length === 0 &&
@@ -126,17 +119,20 @@ const Battles = (props) => {
       props.round1Win === props.round3Win
     ) {
       // alert winner and go to records page
+      console.log(props.round1Win);
     } else if (props.round2Win === props.round3Win) {
       // alert winner and go to records page
+    } else {
+      // alert draw and go to records page
     }
-    props.endGame();
-    props.changeUserBoard({ melee: [], range: [], siege: [] });
   };
 
   const setNextRound = () => {
     let winner = "";
     if (props.aiPoints > props.userPoints) {
       winner = "ai";
+    } else if (props.aiPoints === props.userPoints) {
+      winner = "draw";
     } else {
       winner = props.username;
     }
@@ -147,16 +143,21 @@ const Battles = (props) => {
     } else if (!props.round2Win) {
       // set round2Win to winner
       props.set2Win(winner);
+      props.set2Score(`${props.userPoints}-${props.aiPoints}`);
+      checkWin();
     } else {
       // set round3 win to winner
       props.set3Win(winner);
+      props.set3Score(`${props.userPoints}-${props.aiPoints}`);
+      checkWin();
     }
     props.changeUserBoard({ melee: [], ranged: [], siege: [] });
     props.changeAIBoard({ melee: [], ranged: [], siege: [] });
-    props.aiPoints(0);
-    props.userPoints(0);
-    props.userPass(false);
-    props.aiPass(false);
+    props.setAIPoints(0);
+    props.setUserPoints(0);
+    debugger;
+    props.setUserPass(false);
+    props.setAIPass(false);
   };
 
   const getCardsAvailable = () => {
@@ -246,7 +247,6 @@ const Battles = (props) => {
   };
 
   const userPass = () => {
-    debugger;
     props.setUserPass(true);
   };
   return (
@@ -274,7 +274,7 @@ const Battles = (props) => {
             >
               <p>weather cards</p>
             </div>
-            <button onClick={userPass()}>Pass</button>
+            <button onClick={userPass}>Pass</button>
             <div style={{ border: "3px solid black", width: "50%" }}>
               <h4>{props.username}</h4>
               <p>Cards left: {props.userCardsAvailable.length}</p>

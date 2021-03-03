@@ -5,9 +5,9 @@ const initialState = {
   battle: null,
   cards: null,
   deck: null,
-  userCardsAvailable: null,
-  aiDeck: null,
-  aiCardsAvailable: null,
+  userCardsAvailable: [],
+  aiDeck: [],
+  aiCardsAvailable: [],
   inGame: false,
   roundCount: 0,
   round1Win: null,
@@ -164,7 +164,7 @@ export const gwestReducer = (state = initialState, action) => {
     case "AIPASS":
       return {
         ...state,
-        userPass: action.payload,
+        aiPass: action.payload,
       };
     default:
       return state;
