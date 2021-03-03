@@ -21,12 +21,14 @@ import {
   set1Win,
   set2Win,
   set3Win,
+  addBattle,
 } from "./../redux/gwestActions.js";
 
 const Battles = (props) => {
   useEffect(() => {
     if (props.userPass) {
-      setTimeout(() => aiTurn(), 2000);
+      aiTurn();
+      // setTimeout(() => aiTurn(), 2000);
     }
   });
 
@@ -37,16 +39,21 @@ const Battles = (props) => {
     getCardsAvailable();
     getAIDECK();
 
-    props.changeUserTurn();
     props.startGame();
+    fetch(`http://localhost:3000/battle/new/${props.userID}`)
+      .then((res) => res.json())
+      .then((battle) => {
+        debugger;
+        props.addBattle(battle);
+      });
     // render ai board,
     // render user board and user cards available with onclick function
   };
 
-  const aiTurn = (pass = false) => {
+  const aiTurn = () => {
+    checkRoundEnd();
     if (props.aiCardsAvailable.length === 0) {
       props.setAIPass(true);
-      checkRoundEnd();
       return;
     }
     if (props.userPass && props.userPoints < props.aiPoints) {
@@ -73,9 +80,7 @@ const Battles = (props) => {
       // if (props.userPass) {
       //   aiTurn();
       // }
-      props.changeUserTurn();
     }
-    checkRoundEnd();
   };
 
   const startTurn = (e, card) => {
@@ -94,12 +99,11 @@ const Battles = (props) => {
     props.cardsAvailable(newAvailable);
     //set user points
     props.setUserPoints(props.userPoints + card.card.attack);
-    props.changeUserTurn();
-    setTimeout(() => aiTurn(), 2000);
+    // setTimeout(() => aiTurn(), 2000);
+    aiTurn();
   };
 
   const checkRoundEnd = () => {
-    debugger;
     if (
       (props.userPass && props.aiPass) ||
       (props.aiCardsAvailable.length === 0 &&
@@ -114,17 +118,42 @@ const Battles = (props) => {
 
   const checkWin = () => {
     // check to see if there is a game winner
+    debugger;
+    let win;
     if (
-      props.round1Win === props.round2Win ||
-      props.round1Win === props.round3Win
+      (props.round1Win === props.round2Win ||
+        props.round1Win === props.round3Win) &&
+      props.round1Win !== null &&
+      props.round2Win !== null
     ) {
-      // alert winner and go to records page
-      console.log(props.round1Win);
-    } else if (props.round2Win === props.round3Win) {
-      // alert winner and go to records page
-    } else {
-      // alert draw and go to records page
+      // alert winner and go to records page post battle
+      props.round1Win === props.username ? (win = true) : (win = false);
+      postBattle(win);
+    } else if (
+      props.round2Win === props.round3Win &&
+      props.round2Win !== null
+    ) {
+      // alert winner and go to records page post battle
+      props.round2Win === props.username ? (win = true) : (win = false);
+      postBattle(win);
     }
+  };
+
+  const postBattle = (win) => {
+    debugger;
+    fetch(`http://localhost:3000/battle/${props.battle.id}`, {
+      method: "PATCH",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        id: props.battle.id,
+        win: win,
+        round1: props.round1Score,
+        round2: props.round2Score,
+        round3: props.round3Score,
+      }),
+    }).then(props.history.push("/record"));
   };
 
   const setNextRound = () => {
@@ -144,18 +173,16 @@ const Battles = (props) => {
       // set round2Win to winner
       props.set2Win(winner);
       props.set2Score(`${props.userPoints}-${props.aiPoints}`);
-      checkWin();
     } else {
       // set round3 win to winner
       props.set3Win(winner);
       props.set3Score(`${props.userPoints}-${props.aiPoints}`);
-      checkWin();
     }
+    setTimeout(() => checkWin(), 2000);
     props.changeUserBoard({ melee: [], ranged: [], siege: [] });
     props.changeAIBoard({ melee: [], ranged: [], siege: [] });
     props.setAIPoints(0);
     props.setUserPoints(0);
-    debugger;
     props.setUserPass(false);
     props.setAIPass(false);
   };
@@ -248,6 +275,7 @@ const Battles = (props) => {
 
   const userPass = () => {
     props.setUserPass(true);
+    checkWin();
   };
   return (
     <Fragment>
@@ -281,7 +309,9 @@ const Battles = (props) => {
             </div>
           </div>
           <div style={{ flex: "1" }}>
-            <h3>Sherriff Game Board</h3>
+            <h3>
+              Sherriff, {props.battle.ai_name} Game Board : {props.aiPoints}
+            </h3>
             <div>
               Melee
               <div style={{ border: "5px solid black" }}>
@@ -298,7 +328,9 @@ const Battles = (props) => {
             </div>
             <div>
               <br></br>
-              <h3>User Game Board</h3>
+              <h3>
+                {props.username} Game Board : {props.userPoints}
+              </h3>
               <div>
                 Melee
                 <div style={{ border: "5px solid black" }}>
@@ -417,6 +449,7 @@ const mapDispatchToProps = (dispatch) => {
     set1Score: (score) => dispatch(set1Score(score)),
     set2Score: (score) => dispatch(set2Score(score)),
     set3Score: (score) => dispatch(set3Score(score)),
+    addBattle: (battle) => dispatch(addBattle(battle)),
   };
 };
 

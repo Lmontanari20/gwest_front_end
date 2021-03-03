@@ -16,7 +16,7 @@ const initialState = {
   round1Score: null,
   round2Score: null,
   round3Score: null,
-  userTurn: false,
+  userTurn: true,
   aiBoard: {
     melee: [],
     ranged: [],
@@ -53,6 +53,11 @@ export const gwestReducer = (state = initialState, action) => {
         ...state,
         battles: action.payload,
       };
+    case "ADDBATTLE":
+      return {
+        ...state,
+        battle: action.payload,
+      };
     case "ADDCARDS":
       let deckCards = action.payload.filter((uCard) => uCard.indeck);
       let cards = action.payload.filter((uCard) => !uCard.indeck);
@@ -74,7 +79,7 @@ export const gwestReducer = (state = initialState, action) => {
     case "NEXTROUND":
       return {
         ...state,
-        roundCount: state.roundCount++,
+        roundCount: action.payload,
       };
     case "ROUND1WINNER":
       return {

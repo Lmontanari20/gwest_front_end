@@ -154,3 +154,17 @@ export const set3Score = (score) => {
     payload: score,
   };
 };
+
+export const addBattle = (battle) => {
+  return {
+    type: "ADDBATTLE",
+    payload: battle,
+  };
+};
+
+export const nextRound = (round) => {
+  return {
+    type: "NEXTROUND",
+    payload: round,
+  };
+};
