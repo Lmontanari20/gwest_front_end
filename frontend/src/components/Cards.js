@@ -5,7 +5,9 @@ import { addCards } from "./../redux/gwestActions.js";
 
 const Cards = ({ username, userID, cards, deck, addCards }) => {
   useEffect(() => {
-    fetch(`http://localhost:3000/card/${userID}`)
+    fetch(`http://localhost:3000/card/${userID}`, {
+      headers: { "Authorization": `Bearer ${localStorage.token}` },
+    })
       .then((res) => res.json())
       .then((cardsResp) => addCards(cardsResp));
   }, []);
@@ -58,6 +60,7 @@ const Cards = ({ username, userID, cards, deck, addCards }) => {
       headers: {
         "Content-Type": "application/json",
         "Accepts": "application/json",
+        "Authorization": `Bearer ${localStorage.token}`,
       },
     })
       .then((res) => res.json())

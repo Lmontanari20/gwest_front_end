@@ -31,11 +31,13 @@ const Signup = (props) => {
   return (
     <div className="Signup">
       <form onSubmit={handleSignup}>
-        <label>Username</label>
+        <label>Username: </label>
         <input type="text" name="username" />
         <br />
-        <label>Password</label>
+        <br />
+        <label>Password: </label>
         <input type="password" name="password" />
+        <br />
         <br />
         <input type="submit" value="Submit" />
       </form>

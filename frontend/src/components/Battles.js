@@ -26,9 +26,18 @@ import {
 
 const Battles = (props) => {
   useEffect(() => {
-    if (props.userPass) {
+    if (props.userPass && !props.aiPass) {
       aiTurn();
       // setTimeout(() => aiTurn(), 2000);
+    }
+    if (props.userPass && props.aiPass) {
+      checkRoundEnd();
+    }
+    if (
+      props.round2Score != null ||
+      (props.round3Score != null && props.inGame && props.round1Score !== null)
+    ) {
+      checkWin();
     }
   });
 
@@ -40,10 +49,11 @@ const Battles = (props) => {
     getAIDECK();
 
     props.startGame();
-    fetch(`http://localhost:3000/battle/new/${props.userID}`)
+    fetch(`http://localhost:3000/battle/new/${props.userID}`, {
+      headers: { "Authorization": `Bearer ${localStorage.token}` },
+    })
       .then((res) => res.json())
       .then((battle) => {
-        debugger;
         props.addBattle(battle);
       });
     // render ai board,
@@ -54,11 +64,13 @@ const Battles = (props) => {
     checkRoundEnd();
     if (props.aiCardsAvailable.length === 0) {
       props.setAIPass(true);
+      checkRoundEnd();
       return;
     }
     if (props.userPass && props.userPoints < props.aiPoints) {
       // make ai pass
       props.setAIPass(true);
+      checkRoundEnd();
     } else {
       // grab random card and display on board, delete from available
       let card =
@@ -112,13 +124,11 @@ const Battles = (props) => {
       (props.aiPass && props.userCardsAvailable.length === 0)
     ) {
       setNextRound();
-      checkWin();
     }
   };
 
   const checkWin = () => {
     // check to see if there is a game winner
-    debugger;
     let win;
     if (
       (props.round1Win === props.round2Win ||
@@ -128,6 +138,7 @@ const Battles = (props) => {
     ) {
       // alert winner and go to records page post battle
       props.round1Win === props.username ? (win = true) : (win = false);
+      props.endGame();
       postBattle(win);
     } else if (
       props.round2Win === props.round3Win &&
@@ -141,10 +152,15 @@ const Battles = (props) => {
 
   const postBattle = (win) => {
     debugger;
+    if (props.round1Score === null) {
+      props.history.push("/record");
+      return;
+    }
     fetch(`http://localhost:3000/battle/${props.battle.id}`, {
       method: "PATCH",
       headers: {
         "Content-Type": "application/json",
+        "Authorization": `Bearer ${localStorage.token}`,
       },
       body: JSON.stringify({
         id: props.battle.id,
@@ -153,16 +169,33 @@ const Battles = (props) => {
         round2: props.round2Score,
         round3: props.round3Score,
       }),
-    }).then(props.history.push("/record"));
+    }).then(() => {
+      resetGame();
+      props.history.push("/record");
+    });
+  };
+
+  const resetGame = () => {
+    props.setAIPoints(0);
+    props.endGame();
+    props.setUserPoints(0);
+    props.changeAIBoard({ "melee": [], "ranged": [], "siege": [] });
+    props.changeUserBoard({ "melee": [], "ranged": [], "siege": [] });
+    props.setUserPass(false);
+    props.setAIPass(false);
+    props.set1Score(null);
+    props.set2Score(null);
+    props.set3Score(null);
+    props.set1Win(null);
+    props.set2Win(null);
+    props.set3Win(null);
   };
 
   const setNextRound = () => {
     let winner = "";
-    if (props.aiPoints > props.userPoints) {
+    if (props.aiPoints >= props.userPoints) {
       winner = "ai";
-    } else if (props.aiPoints === props.userPoints) {
-      winner = "draw";
-    } else {
+    } else if (props.aiPoints < props.userPoints) {
       winner = props.username;
     }
     if (!props.round1Win) {
@@ -178,7 +211,6 @@ const Battles = (props) => {
       props.set3Win(winner);
       props.set3Score(`${props.userPoints}-${props.aiPoints}`);
     }
-    setTimeout(() => checkWin(), 2000);
     props.changeUserBoard({ melee: [], ranged: [], siege: [] });
     props.changeAIBoard({ melee: [], ranged: [], siege: [] });
     props.setAIPoints(0);
@@ -253,7 +285,9 @@ const Battles = (props) => {
   };
 
   const getAIDECK = () => {
-    fetch("http://localhost:3000/card/ai/deck")
+    fetch("http://localhost:3000/card/ai/deck", {
+      headers: { "Authorization": `Bearer ${localStorage.token}` },
+    })
       .then((res) => res.json())
       .then((cards) => {
         props.aiDeck(cards);
@@ -278,7 +312,7 @@ const Battles = (props) => {
     checkWin();
   };
   return (
-    <Fragment>
+    <div>
       <div className="game-start" style={{ textAlign: "center" }}>
         <h2>Wild Wild Gwest Event</h2>
         <h5>Make sure you put cards in your deck!!</h5>
@@ -286,13 +320,23 @@ const Battles = (props) => {
       </div>
       {props.inGame && (
         <div className="board" style={{ display: "flex" }}>
-          <div style={{ flex: "1" }}>
-            <div style={{ border: "3px solid black", width: "50%" }}>
+          <div style={{ width: "400px" }}>
+            <div
+              style={{
+                border: "3px solid black",
+                width: "50%",
+                backgroundColor: "RGB(240,209,163,0.8)",
+              }}
+            >
               <p>Opponent name</p>
               <p>Opponent difficulty</p>
+              <p>
+                Wins:{" "}
+                {props.round1Win === "ai" || props.round2Win === "ai" ? 1 : 0}
+              </p>
               <p>Cards left: {props.aiCardsAvailable.length}</p>
             </div>
-            <div
+            {/* <div
               style={{
                 border: "3px solid black",
                 marginTop: "200px",
@@ -301,16 +345,40 @@ const Battles = (props) => {
               }}
             >
               <p>weather cards</p>
-            </div>
-            <button onClick={userPass}>Pass</button>
-            <div style={{ border: "3px solid black", width: "50%" }}>
+            </div> */}
+            <button
+              style={{ marginTop: "100px", marginBottom: "100px" }}
+              onClick={userPass}
+            >
+              Pass
+            </button>
+            <div
+              style={{
+                border: "3px solid black",
+                width: "50%",
+                backgroundColor: "RGB(240,209,163,0.8)",
+              }}
+            >
               <h4>{props.username}</h4>
+              <p>
+                Wins:{" "}
+                {props.round1Win === props.username ||
+                props.round2Win === props.username
+                  ? 1
+                  : 0}
+              </p>
               <p>Cards left: {props.userCardsAvailable.length}</p>
             </div>
           </div>
-          <div style={{ flex: "1" }}>
+          <div
+            style={{
+              flex: "0 0 auto",
+              backgroundColor: "RGB(240,209,163,0.8)",
+            }}
+          >
             <h3>
-              Sherriff, {props.battle.ai_name} Game Board : {props.aiPoints}
+              Sherriff, {props.battle ? props.battle.ai_name : ""} Game Board :{" "}
+              {props.aiPoints}
             </h3>
             <div>
               Melee
@@ -333,15 +401,15 @@ const Battles = (props) => {
               </h3>
               <div>
                 Melee
-                <div style={{ border: "5px solid black" }}>
+                <div style={{ border: "5px solid black", display: "flex" }}>
                   {mapUserGame("melee")}
                 </div>
                 Range
-                <div style={{ border: "5px solid black" }}>
+                <div style={{ border: "5px solid black", display: "flex" }}>
                   {mapUserGame("ranged")}
                 </div>
                 Siege
-                <div style={{ border: "5px solid black" }}>
+                <div style={{ border: "5px solid black", display: "flex" }}>
                   {mapUserGame("siege")}
                 </div>
                 <div style={{ border: "5px solid black", display: "flex" }}>
@@ -350,7 +418,7 @@ const Battles = (props) => {
               </div>
             </div>
           </div>
-          <div style={{ flex: "1" }}>
+          {/* <div style={{ flex: "1" }}>
             <div style={{ display: "flex" }}>
               <div
                 style={{
@@ -395,10 +463,10 @@ const Battles = (props) => {
                 deck
               </div>
             </div>
-          </div>
+          </div> */}
         </div>
       )}
-    </Fragment>
+    </div>
   );
 };
 
@@ -408,7 +476,7 @@ const mapStateToProps = (state) => {
     userID: state.userID,
     deck: state.deck,
     userCardsAvailable: state.userCardsAvailable,
-    battle: state.deck,
+    battle: state.battle,
     aiDeck: state.aiDeck,
     aiCardsAvailable: state.aiCardsAvailable,
     inGame: state.inGame,

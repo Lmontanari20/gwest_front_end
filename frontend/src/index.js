@@ -16,7 +16,16 @@ const store = createStore(
 ReactDOM.render(
   <Provider store={store}>
     <Router>
-      <App />
+      <App
+        style={{
+          backgroundImage:
+            "url(" +
+            "https://www.fodors.com/wp-content/uploads/2020/01/11_WildWestTowns__HERO_shutterstock_267103796.jpg" +
+            ")",
+          backgroundRepeat: "no-repeat",
+          backgroundSize: "cover",
+        }}
+      />
     </Router>
   </Provider>,
   document.getElementById("root")

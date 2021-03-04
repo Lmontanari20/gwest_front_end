@@ -1,11 +1,14 @@
 import React, { Fragment, useEffect } from "react";
 import { connect } from "react-redux";
+import "./../index.css";
 import { addBattles } from "./../redux/gwestActions.js";
 import { Card } from "react-bootstrap";
 
 const Record = (props) => {
   useEffect(() => {
-    fetch(`http://localhost:3000/battle/${props.userID}`)
+    fetch(`http://localhost:3000/battle/${props.userID}`, {
+      headers: { "Authorization": `Bearer ${localStorage.token}` },
+    })
       .then((res) => res.json())
       .then((battles) => {
         props.addBattles(battles);
@@ -14,13 +17,14 @@ const Record = (props) => {
 
   const mapBattlesToCards = () => {
     let battles = props.battles;
-    if (!battles || battles.status === 404) {
+    debugger;
+    if (!battles) {
       return;
     }
     return battles.map((battle) => {
       return (
-        <Card key={`${battle.id}`}>
-          <Card.Body>
+        <Card className="recordCard" key={`${battle.id}`}>
+          <Card.Body className="recordCard">
             <Card.Title>Sheriff: {battle.ai_name}</Card.Title>
             <Card.Subtitle>
               Outcome: {battle.win ? "YOU WON!!" : "YOU LOST..."}
@@ -39,7 +43,10 @@ const Record = (props) => {
   return (
     <Fragment>
       <h2>Record</h2>
-      {mapBattlesToCards()}
+      <br></br>
+      <div style={{ display: "flex", flexWrap: "wrap" }}>
+        {mapBattlesToCards()}
+      </div>
     </Fragment>
   );
 };

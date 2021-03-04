@@ -1,5 +1,6 @@
 import React from "react";
 import { connect } from "react-redux";
+import "./../index.css";
 import { login, logout } from "./../redux/gwestActions.js";
 const Login = (props) => {
   // function that handles the login functionality
@@ -28,12 +29,14 @@ const Login = (props) => {
   return (
     <div className="Login">
       <form onSubmit={handleLogin}>
-        <label>Username</label>
+        <label>Username: </label>
         <input type="text" name="username" />
         <br />
-        <label>Password</label>
+        <br></br>
+        <label>Password: </label>
         <input type="password" name="password" />
         <br />
+        <br></br>
         <input type="submit" value="Submit" />
       </form>
     </div>
