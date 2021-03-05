@@ -21,10 +21,12 @@ const Record = (props) => {
     if (!battles) {
       return;
     }
+    battles = props.battles.reverse();
     return battles.map((battle) => {
       return (
+        // <div className="cardDiv">
         <Card className="recordCard" key={`${battle.id}`}>
-          <Card.Body className="recordCard">
+          <Card.Body className="recordCard2">
             <Card.Title>Sheriff: {battle.ai_name}</Card.Title>
             <Card.Subtitle>
               Outcome: {battle.win ? "YOU WON!!" : "YOU LOST..."}
@@ -36,17 +38,16 @@ const Record = (props) => {
             </Card.Text>
           </Card.Body>
         </Card>
+        // </div>
       );
     });
   };
 
   return (
     <Fragment>
-      <h2>Record</h2>
+      <h2 className="recordH2">Record</h2>
       <br></br>
-      <div style={{ display: "flex", flexWrap: "wrap" }}>
-        {mapBattlesToCards()}
-      </div>
+      <div className="recordDiv">{mapBattlesToCards()}</div>
     </Fragment>
   );
 };

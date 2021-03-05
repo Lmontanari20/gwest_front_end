@@ -30,6 +30,7 @@ const Signup = (props) => {
 
   return (
     <div className="Signup">
+      <h2>Sign Up</h2>
       <form onSubmit={handleSignup}>
         <label>Username: </label>
         <input type="text" name="username" />

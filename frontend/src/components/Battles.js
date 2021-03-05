@@ -1,5 +1,6 @@
 import React, { Fragment, useEffect } from "react";
 import { connect } from "react-redux";
+import "./../index.css";
 import { Card } from "react-bootstrap";
 import {
   addBattles,
@@ -233,10 +234,7 @@ const Battles = (props) => {
   const mapUserGame = (area) => {
     return props.userBoard[area].map((card) => {
       return (
-        <Card
-          style={{ width: "35%", margin: "auto", flex: "1" }}
-          key={`${card.card.id}`}
-        >
+        <Card className="battle-card" key={`${card.card.id}`}>
           <Card.Body>
             <Card.Text>
               {card.card.name} Class: {card.card.cardClass} Attack:{" "}
@@ -251,10 +249,7 @@ const Battles = (props) => {
   const mapAIGame = (area) => {
     return props.aiBoard[area].map((card) => {
       return (
-        <Card
-          style={{ width: "35%", margin: "auto", flex: "1" }}
-          key={`${card.id}`}
-        >
+        <Card className="battle-card" key={`${card.id}`}>
           <Card.Body>
             <Card.Text>
               {card.name} Class: {card.cardClass} Attack: {card.attack}
@@ -269,7 +264,7 @@ const Battles = (props) => {
     return props.userCardsAvailable.map((card) => {
       return (
         <Card
-          style={{ width: "35%", margin: "auto", flex: "1" }}
+          className="battle-card"
           key={`${card.card.id}`}
           onClick={(e) => startTurn(e, card)}
         >
@@ -313,23 +308,16 @@ const Battles = (props) => {
   };
   return (
     <div>
-      <div className="game-start" style={{ textAlign: "center" }}>
+      <div className="game-start">
         <h2>Wild Wild Gwest Event</h2>
         <h5>Make sure you put cards in your deck!!</h5>
         <button onClick={startGame}>Play</button>
       </div>
       {props.inGame && (
-        <div className="board" style={{ display: "flex" }}>
-          <div style={{ width: "400px" }}>
-            <div
-              style={{
-                border: "3px solid black",
-                width: "50%",
-                backgroundColor: "RGB(240,209,163,0.8)",
-              }}
-            >
-              <p>Opponent name</p>
-              <p>Opponent difficulty</p>
+        <div className="board">
+          <div className="left-board">
+            <div className="ai-stat-board">
+              <p>Sherriff: {props.battle.ai_name && props.battle.ai_name}</p>
               <p>
                 Wins:{" "}
                 {props.round1Win === "ai" || props.round2Win === "ai" ? 1 : 0}
@@ -346,19 +334,10 @@ const Battles = (props) => {
             >
               <p>weather cards</p>
             </div> */}
-            <button
-              style={{ marginTop: "100px", marginBottom: "100px" }}
-              onClick={userPass}
-            >
+            <button className="pass-button" onClick={userPass}>
               Pass
             </button>
-            <div
-              style={{
-                border: "3px solid black",
-                width: "50%",
-                backgroundColor: "RGB(240,209,163,0.8)",
-              }}
-            >
+            <div className="user-stat-board">
               <h4>{props.username}</h4>
               <p>
                 Wins:{" "}
@@ -370,28 +349,19 @@ const Battles = (props) => {
               <p>Cards left: {props.userCardsAvailable.length}</p>
             </div>
           </div>
-          <div
-            style={{
-              flex: "0 0 auto",
-              backgroundColor: "RGB(240,209,163,0.8)",
-            }}
-          >
-            <h3>
-              Sherriff, {props.battle ? props.battle.ai_name : ""} Game Board :{" "}
-              {props.aiPoints}
-            </h3>
+          <div className="game-board">
             <div>
-              Melee
-              <div style={{ border: "5px solid black" }}>
-                {mapAIGame("melee")}
-              </div>
-              Range
-              <div style={{ border: "5px solid black" }}>
-                {mapAIGame("ranged")}
-              </div>
-              Siege
-              <div style={{ border: "5px solid black" }}>
-                {mapAIGame("siege")}
+              <h3>
+                Sherriff, {props.battle ? props.battle.ai_name : ""} Game Board
+                : {props.aiPoints}
+              </h3>
+              <div>
+                Melee
+                <div className="ai-melee">{mapAIGame("melee")}</div>
+                Range
+                <div className="ai-range">{mapAIGame("ranged")}</div>
+                Siege
+                <div className="ai-siege">{mapAIGame("siege")}</div>
               </div>
             </div>
             <div>
@@ -401,23 +371,19 @@ const Battles = (props) => {
               </h3>
               <div>
                 Melee
-                <div style={{ border: "5px solid black", display: "flex" }}>
-                  {mapUserGame("melee")}
-                </div>
+                <div className="user-melee">{mapUserGame("melee")}</div>
                 Range
-                <div style={{ border: "5px solid black", display: "flex" }}>
-                  {mapUserGame("ranged")}
-                </div>
+                <div className="user-range">{mapUserGame("ranged")}</div>
                 Siege
-                <div style={{ border: "5px solid black", display: "flex" }}>
-                  {mapUserGame("siege")}
-                </div>
+                <div className="user-siege">{mapUserGame("siege")}</div>
+                Cards Available
                 <div style={{ border: "5px solid black", display: "flex" }}>
                   {mapCardsAvailable()}
                 </div>
               </div>
             </div>
           </div>
+
           {/* <div style={{ flex: "1" }}>
             <div style={{ display: "flex" }}>
               <div

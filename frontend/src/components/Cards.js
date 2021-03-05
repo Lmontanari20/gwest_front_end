@@ -1,4 +1,5 @@
 import React, { useEffect } from "react";
+import "./../index.css";
 import { Card } from "react-bootstrap";
 import { connect } from "react-redux";
 import { addCards } from "./../redux/gwestActions.js";
@@ -19,7 +20,7 @@ const Cards = ({ username, userID, cards, deck, addCards }) => {
     return cards.map((uCard) => {
       return (
         <Card
-          style={{ width: "75%", margin: "auto" }}
+          className="card"
           key={`${uCard.card.id}`}
           onClick={() => handleClick(uCard.card.id)}
         >
@@ -40,7 +41,7 @@ const Cards = ({ username, userID, cards, deck, addCards }) => {
     return deck.map((uCard) => {
       return (
         <Card
-          style={{ width: "75%", margin: "auto" }}
+          className="card"
           key={`${uCard.card.id}`}
           onClick={() => handleClick(uCard.card.id)}
         >
@@ -69,14 +70,14 @@ const Cards = ({ username, userID, cards, deck, addCards }) => {
 
   return (
     <div style={{ display: "flex" }}>
-      <div className="your-cards" style={{ flex: "1", textAlign: "center" }}>
+      <div className="your-cards">
         <h2>All Cards</h2>
         {mapCards()}
       </div>
-      <div className="card-profile" style={{ flex: "1", textAlign: "center" }}>
+      <div className="card-profile">
         <h4>Username: {username}</h4>
       </div>
-      <div className="your-deck" style={{ flex: "1", textAlign: "center" }}>
+      <div className="your-deck">
         <h2>Cards in Deck</h2>
         {mapDeck()}
       </div>
