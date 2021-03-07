@@ -8,6 +8,7 @@ body {
   background-image: url("https://www.fodors.com/wp-content/uploads/2020/01/11_WildWestTowns__HERO_shutterstock_267103796.jpg");
   background-repeat: no-repeat;
   background-size: cover;
+  background-attachment: fixed;
 }
 
 code {
@@ -25,11 +26,17 @@ code {
   margin-right: auto;
 }
 
-.recordCard.card {
-  background-color: rgb(240, 209, 163, 0.9);
+.recordCard.card,
+.card-card.card {
+  background-color: rgba(240, 209, 163);
   margin-top: 50px;
   border-width: 3px;
   border-color: rgba(70, 42, 1, 1);
+}
+
+.card-card.card {
+  flex: 1;
+  flex-wrap: wrap;
 }
 
 .recordDiv {
@@ -49,9 +56,15 @@ code {
 
 .card {
   width: 75%;
+  background-color: rgb(240, 209, 163, 0.9);
+  opacity: 0.8;
   margin: auto;
-  background-color: rgb(240, 209, 163, 0.8);
-  opacity: 0.6;
+}
+
+.card-body {
+  background-color: rgb(240, 209, 163);
+  margin-left: auto;
+  margin-right: auto;
 }
 
 .your-cards,

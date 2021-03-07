@@ -20,9 +20,9 @@ const Cards = ({ username, userID, cards, deck, addCards }) => {
     return cards.map((uCard) => {
       return (
         <Card
-          className="card"
+          className="card-card"
           key={`${uCard.card.id}`}
-          onClick={() => handleClick(uCard.card.id)}
+          onClick={() => handleClick(uCard.card.id, false)}
         >
           <Card.Body>
             <Card.Title>{uCard.card.name}</Card.Title>
@@ -41,9 +41,9 @@ const Cards = ({ username, userID, cards, deck, addCards }) => {
     return deck.map((uCard) => {
       return (
         <Card
-          className="card"
+          className="card-card"
           key={`${uCard.card.id}`}
-          onClick={() => handleClick(uCard.card.id)}
+          onClick={() => handleClick(uCard.card.id, true)}
         >
           <Card.Body>
             <Card.Title>{uCard.card.name}</Card.Title>
@@ -55,7 +55,11 @@ const Cards = ({ username, userID, cards, deck, addCards }) => {
     });
   };
 
-  const handleClick = (id) => {
+  const handleClick = (id, deckCard) => {
+    debugger;
+    if (deckCard && deck.length <= 10) {
+      return alert("You need atleast 10 cards in your deck at all times.");
+    }
     fetch(`http://localhost:3000/card/${userID}/${id}`, {
       method: "PATCH",
       headers: {
@@ -71,14 +75,14 @@ const Cards = ({ username, userID, cards, deck, addCards }) => {
   return (
     <div style={{ display: "flex" }}>
       <div className="your-cards">
-        <h2>All Cards</h2>
+        <h2>All Cards ({cards.length})</h2>
         {mapCards()}
       </div>
       <div className="card-profile">
         <h4>Username: {username}</h4>
       </div>
       <div className="your-deck">
-        <h2>Cards in Deck</h2>
+        <h2>Cards in Deck ({deck.length})</h2>
         {mapDeck()}
       </div>
     </div>

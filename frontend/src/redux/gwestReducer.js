@@ -1,10 +1,10 @@
 const initialState = {
   username: null,
   userID: null,
-  battles: null,
+  battles: [],
   battle: null,
-  cards: null,
-  deck: null,
+  cards: [],
+  deck: [],
   userCardsAvailable: [],
   aiDeck: [],
   aiCardsAvailable: [],

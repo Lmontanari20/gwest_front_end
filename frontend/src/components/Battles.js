@@ -46,6 +46,9 @@ const Battles = (props) => {
     if (props.inGame) {
       return;
     }
+    if (props.deck.length < 10) {
+      return alert("Set your deck before you start a game!!");
+    }
     getCardsAvailable();
     getAIDECK();
 
@@ -317,7 +320,9 @@ const Battles = (props) => {
         <div className="board">
           <div className="left-board">
             <div className="ai-stat-board">
-              <p>Sherriff: {props.battle.ai_name && props.battle.ai_name}</p>
+              <p>
+                Sherriff: {props.battle.ai_name ? props.battle.ai_name : ""}
+              </p>
               <p>
                 Wins:{" "}
                 {props.round1Win === "ai" || props.round2Win === "ai" ? 1 : 0}
@@ -352,8 +357,8 @@ const Battles = (props) => {
           <div className="game-board">
             <div>
               <h3>
-                Sherriff, {props.battle ? props.battle.ai_name : ""} Game Board
-                : {props.aiPoints}
+                Sherriff, {props.battle.ai_name ? props.battle.ai_name : ""}{" "}
+                Game Board : {props.aiPoints}
               </h3>
               <div>
                 Melee

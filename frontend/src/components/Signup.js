@@ -6,20 +6,21 @@ const Signup = (props) => {
   // function that handles the signup functionality
   const handleSignup = (e, userInfo) => {
     e.preventDefault();
-
+    let user = {
+      username: e.target.username.value,
+      password: e.target.password.value,
+    };
     fetch("http://localhost:3000/signup", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
         "Accepts": "application/json",
       },
-      body: JSON.stringify({
-        username: e.target.username.value,
-        password: e.target.password.value,
-      }),
+      body: JSON.stringify(user),
     })
       .then((resp) => resp.json())
       .then((data) => {
+        debugger;
         // if data.username else if data.error
         props.login(data.username, data.id);
         localStorage.setItem("token", data.token);

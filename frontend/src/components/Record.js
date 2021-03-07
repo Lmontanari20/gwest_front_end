@@ -11,17 +11,17 @@ const Record = (props) => {
     })
       .then((res) => res.json())
       .then((battles) => {
-        props.addBattles(battles);
+        props.addBattles(battles.reverse());
       });
   }, []);
 
   const mapBattlesToCards = () => {
     let battles = props.battles;
     debugger;
-    if (!battles) {
+    if (battles.length == 0) {
       return;
     }
-    battles = props.battles.reverse();
+    battles = props.battles;
     return battles.map((battle) => {
       return (
         // <div className="cardDiv">
@@ -47,7 +47,11 @@ const Record = (props) => {
     <Fragment>
       <h2 className="recordH2">Record</h2>
       <br></br>
-      <div className="recordDiv">{mapBattlesToCards()}</div>
+      {props.battles.length != 0 ? (
+        <div className="recordDiv">{mapBattlesToCards()}</div>
+      ) : (
+        <h4>You do not have a record yet! Set your deck and go play!</h4>
+      )}
     </Fragment>
   );
 };
