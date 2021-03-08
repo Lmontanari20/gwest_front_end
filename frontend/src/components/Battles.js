@@ -146,6 +146,10 @@ const Battles = (props) => {
       props.round1Win === props.username ? (win = true) : (win = false);
       props.endGame();
       postBattle(win);
+      if (props.addCard) {
+        addNewCard();
+        props.setAddCard(false);
+      }
     } else if (
       props.round2Win === props.round3Win &&
       props.round2Win !== null
@@ -153,10 +157,10 @@ const Battles = (props) => {
       // alert winner and go to records page post battle
       props.round2Win === props.username ? (win = true) : (win = false);
       postBattle(win);
-    }
-    if (props.addCard) {
-      addNewCard();
-      props.setAddCard(false);
+      if (props.addCard) {
+        addNewCard();
+        props.setAddCard(false);
+      }
     }
   };
 
@@ -253,7 +257,7 @@ const Battles = (props) => {
   const mapUserGame = (area) => {
     return props.userBoard[area].map((card) => {
       return (
-        <Card className="battle-card" key={`${card.card.id}`}>
+        <Card className="battle-card" key={`${card.id}`}>
           <Card.Body>
             <Card.Text>
               {card.card.name} Class: {card.card.cardClass} Attack:{" "}
@@ -284,7 +288,7 @@ const Battles = (props) => {
       return (
         <Card
           className="battle-card"
-          key={`${card.card.id}`}
+          key={`${card.id}`}
           onClick={(e) => startTurn(e, card)}
         >
           <Card.Body>
