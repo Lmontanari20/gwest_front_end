@@ -21,8 +21,8 @@ const Cards = ({ username, userID, cards, deck, addCards }) => {
       return (
         <Card
           className="card-card"
-          key={`${uCard.card.id}`}
-          onClick={() => handleClick(uCard.card.id, false)}
+          key={`${uCard.id}`}
+          onClick={() => handleClick(uCard.id, false)}
         >
           <Card.Body>
             <Card.Title>{uCard.card.name}</Card.Title>
@@ -42,8 +42,8 @@ const Cards = ({ username, userID, cards, deck, addCards }) => {
       return (
         <Card
           className="card-card"
-          key={`${uCard.card.id}`}
-          onClick={() => handleClick(uCard.card.id, true)}
+          key={`${uCard.id}`}
+          onClick={() => handleClick(uCard.id, true)}
         >
           <Card.Body>
             <Card.Title>{uCard.card.name}</Card.Title>
@@ -56,7 +56,6 @@ const Cards = ({ username, userID, cards, deck, addCards }) => {
   };
 
   const handleClick = (id, deckCard) => {
-    debugger;
     if (deckCard && deck.length <= 10) {
       return alert("You need atleast 10 cards in your deck at all times.");
     }
@@ -69,7 +68,9 @@ const Cards = ({ username, userID, cards, deck, addCards }) => {
       },
     })
       .then((res) => res.json())
-      .then((cards) => addCards(cards));
+      .then((cards) => {
+        addCards(cards);
+      });
   };
 
   return (

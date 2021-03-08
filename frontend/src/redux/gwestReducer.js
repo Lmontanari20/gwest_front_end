@@ -31,6 +31,7 @@ const initialState = {
   userPass: false,
   aiPoints: 0,
   userPoints: 0,
+  addCard: true,
 };
 
 export const gwestReducer = (state = initialState, action) => {
@@ -61,6 +62,7 @@ export const gwestReducer = (state = initialState, action) => {
     case "ADDCARDS":
       let deckCards = action.payload.filter((uCard) => uCard.indeck);
       let cards = action.payload.filter((uCard) => !uCard.indeck);
+      debugger;
       return {
         ...state,
         cards: cards,
@@ -170,6 +172,11 @@ export const gwestReducer = (state = initialState, action) => {
       return {
         ...state,
         aiPass: action.payload,
+      };
+    case "SETADDCARD":
+      return {
+        ...state,
+        addCard: action.payload,
       };
     default:
       return state;

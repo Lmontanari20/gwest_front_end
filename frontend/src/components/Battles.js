@@ -23,7 +23,7 @@ import {
   set2Win,
   set3Win,
   addBattle,
-  addCards,
+  setAddCard,
 } from "./../redux/gwestActions.js";
 
 const Battles = (props) => {
@@ -52,6 +52,7 @@ const Battles = (props) => {
     }
     getCardsAvailable();
     getAIDECK();
+    props.setAddCard(true);
 
     props.startGame();
     fetch(`http://localhost:3000/battle/new/${props.userID}`, {
@@ -151,7 +152,11 @@ const Battles = (props) => {
     ) {
       // alert winner and go to records page post battle
       props.round2Win === props.username ? (win = true) : (win = false);
-      postBattle(win, false);
+      postBattle(win);
+    }
+    if (props.addCard) {
+      addNewCard();
+      props.setAddCard(false);
     }
   };
 
@@ -340,14 +345,7 @@ const Battles = (props) => {
               </p>
               <p>Cards left: {props.aiCardsAvailable.length}</p>
             </div>
-            {/* <div
-              style={{
-                border: "3px solid black",
-                marginTop: "200px",
-                marginBottom: "200px",
-                width: "50%",
-              }}
-            >
+            {/* <div>
               <p>weather cards</p>
             </div> */}
             <button className="pass-button" onClick={userPass}>
@@ -373,11 +371,17 @@ const Battles = (props) => {
               </h3>
               <div>
                 Melee
-                <div className="ai-melee">{mapAIGame("melee")}</div>
+                <div className="ai-melee" style={{ display: "flex" }}>
+                  {mapAIGame("melee")}
+                </div>
                 Range
-                <div className="ai-range">{mapAIGame("ranged")}</div>
+                <div className="ai-range" style={{ display: "flex" }}>
+                  {mapAIGame("ranged")}
+                </div>
                 Siege
-                <div className="ai-siege">{mapAIGame("siege")}</div>
+                <div className="ai-siege" style={{ display: "flex" }}>
+                  {mapAIGame("siege")}
+                </div>
               </div>
             </div>
             <div>
@@ -387,11 +391,17 @@ const Battles = (props) => {
               </h3>
               <div>
                 Melee
-                <div className="user-melee">{mapUserGame("melee")}</div>
+                <div className="user-melee" style={{ display: "flex" }}>
+                  {mapUserGame("melee")}
+                </div>
                 Range
-                <div className="user-range">{mapUserGame("ranged")}</div>
+                <div className="user-range" style={{ display: "flex" }}>
+                  {mapUserGame("ranged")}
+                </div>
                 Siege
-                <div className="user-siege">{mapUserGame("siege")}</div>
+                <div className="user-siege" style={{ display: "flex" }}>
+                  {mapUserGame("siege")}
+                </div>
                 Cards Available
                 <div style={{ border: "5px solid black", display: "flex" }}>
                   {mapCardsAvailable()}
@@ -475,6 +485,7 @@ const mapStateToProps = (state) => {
     round1Score: state.round1Score,
     round2Score: state.round2Score,
     round3Score: state.round3Score,
+    addCard: state.addCard,
   };
 };
 
@@ -500,6 +511,7 @@ const mapDispatchToProps = (dispatch) => {
     set2Score: (score) => dispatch(set2Score(score)),
     set3Score: (score) => dispatch(set3Score(score)),
     addBattle: (battle) => dispatch(addBattle(battle)),
+    setAddCard: (add) => dispatch(setAddCard(add)),
   };
 };
 

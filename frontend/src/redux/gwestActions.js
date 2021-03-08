@@ -168,3 +168,10 @@ export const nextRound = (round) => {
     payload: round,
   };
 };
+
+export const setAddCard = (add) => {
+  return {
+    type: "SETADDCARD",
+    payload: add,
+  };
+};

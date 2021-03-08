@@ -43,9 +43,29 @@ const Record = (props) => {
     });
   };
 
+  const getWins = () => {
+    if (!props.battles) {
+      return 0;
+    }
+    let wins = props.battles.filter((battle) => battle.win);
+    return wins.length;
+  };
+
+  const getLosses = () => {
+    if (!props.battles) {
+      return 0;
+    }
+    let losses = props.battles.filter((battle) => !battle.win);
+    return losses.length;
+  };
+
   return (
     <Fragment>
-      <h2 className="recordH2">Record</h2>
+      <div className="record-label">
+        <h2 className="recordH2">Record</h2>
+        <p>Wins: {getWins()}</p>
+        <p>Losses: {getLosses()}</p>
+      </div>
       <br></br>
       {props.battles.length != 0 ? (
         <div className="recordDiv">{mapBattlesToCards()}</div>
