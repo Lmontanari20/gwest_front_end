@@ -24,6 +24,7 @@ code {
   text-align: center;
   margin-left: auto;
   margin-right: auto;
+  margin-top: 25px;
 }
 
 .recordCard.card,
@@ -67,6 +68,16 @@ code {
   margin-right: auto;
 }
 
+.home {
+  background-color: rgb(240, 209, 163, 0.8);
+  border: 3px solid rgba(70, 42, 1, 1);
+  width: 60%;
+  text-align: center;
+  margin-left: auto;
+  margin-right: auto;
+  margin-top: 25px;
+}
+
 .your-cards,
 .card-profile,
 .your-deck {
@@ -74,10 +85,25 @@ code {
   text-align: center;
 }
 
+.nav-logo {
+  width: 15%;
+  height: 15%;
+}
+
+.color-nav {
+  background-color: rgb(240, 209, 163, 0.8);
+  border: 3px solid rgba(70, 42, 1, 1);
+}
+
 .battle-card {
   width: 35%;
   margin: auto;
   flex: 1;
+}
+
+.logo {
+  width: 50%;
+  height: 50%;
 }
 
 .game-start {
@@ -88,6 +114,7 @@ code {
   background-color: rgb(240, 209, 163, 0.8);
   text-align: center;
   margin-bottom: 30px;
+  margin-top: 25px;
 }
 
 .board {

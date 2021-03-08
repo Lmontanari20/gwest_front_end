@@ -1,6 +1,7 @@
 import React from "react";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "./App.css";
+import Home from "./components/Home.js";
 import NavBar from "./components/NavBar.js";
 import Login from "./components/Login.js";
 import Signup from "./components/Signup.js";
@@ -17,6 +18,7 @@ const App = (props) => {
     <Router>
       <NavBar></NavBar>
       <Switch>
+        <Route exact path="/" component={Home}></Route>
         <Route
           path="/login"
           component={(props) => <Login {...props} />}

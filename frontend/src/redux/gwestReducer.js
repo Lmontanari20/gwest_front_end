@@ -2,7 +2,7 @@ const initialState = {
   username: null,
   userID: null,
   battles: [],
-  battle: null,
+  battle: { ai_name: null },
   cards: [],
   deck: [],
   userCardsAvailable: [],

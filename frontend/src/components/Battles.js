@@ -23,6 +23,7 @@ import {
   set2Win,
   set3Win,
   addBattle,
+  addCards,
 } from "./../redux/gwestActions.js";
 
 const Battles = (props) => {
@@ -150,8 +151,18 @@ const Battles = (props) => {
     ) {
       // alert winner and go to records page post battle
       props.round2Win === props.username ? (win = true) : (win = false);
-      postBattle(win);
+      postBattle(win, false);
     }
+  };
+
+  const addNewCard = () => {
+    fetch(`http://localhost:3000/card/${props.userID}`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        "Authorization": `Bearer ${localStorage.token}`,
+      },
+    });
   };
 
   const postBattle = (win) => {
