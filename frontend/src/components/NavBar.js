@@ -9,7 +9,7 @@ import { login, logout } from "./../redux/gwestActions.js";
 const NavBar = (props) => {
   return (
     <Fragment>
-      <Navbar className="color-nav" variant="light">
+      <Navbar className="color-nav" style={{ position: "fixed" }}>
         <LinkContainer exact to="/">
           <Navbar.Brand>
             <img

@@ -409,7 +409,12 @@ const Battles = (props) => {
                   {mapUserGame("siege")}
                 </div>
                 Cards Available
-                <div style={{ border: "5px solid black", display: "flex" }}>
+                <div
+                  style={{
+                    border: "5px solid black",
+                    display: "flex",
+                  }}
+                >
                   {mapCardsAvailable()}
                 </div>
               </div>
