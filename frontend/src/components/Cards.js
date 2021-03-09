@@ -3,6 +3,27 @@ import "./../index.css";
 import { Card } from "react-bootstrap";
 import { connect } from "react-redux";
 import { addCards } from "./../redux/gwestActions.js";
+import baba from "./../assets/cards/Baba_Looey_Card.png";
+import gat from "./../assets/cards/Gattling_Gun_Card.png";
+import man from "./../assets/cards/No_Name_Card.png";
+import ringo from "./../assets/cards/Ringo_Kid_Card.png";
+import pete from "./../assets/cards/Pistol_Pete_Card.png";
+import bill from "./../assets/cards/Bufflo_Bill_Card.png";
+import billy from "./../assets/cards/Billy_The_Kid_Card.png";
+import butch from "./../assets/cards/Butch_Cassidy_Card.png";
+import quick from "./../assets/cards/quick_Draw_McGraw.png";
+import bonnie from "./../assets/cards/Bonnie_Clyde_Card.png";
+import delores from "./../assets/cards/Dolores_Abernathy_Card.png";
+import jane from "./../assets/cards/Calamity_Jane_Card.png";
+import pony from "./../assets/cards/Pony_Card.png";
+import stallion from "./../assets/cards/Stallion_Card.png";
+import donkey from "./../assets/cards/Donkey_Card.png";
+import bow from "./../assets/cards/Bow_Arrow_Card.png";
+import rifle from "./../assets/cards/Rifle_Card.png";
+import revolver from "./../assets/cards/Revolver_Card.png";
+import dual from "./../assets/cards/Dual_Revolvers.png";
+import speedy from "./../assets/cards/Speedy.png";
+// import {} from "./../assets/cards";
 
 const Cards = ({ username, userID, cards, deck, addCards, battles }) => {
   useEffect(() => {
@@ -13,23 +34,76 @@ const Cards = ({ username, userID, cards, deck, addCards, battles }) => {
       .then((cardsResp) => addCards(cardsResp));
   }, []);
 
+  const getPhoto = (name) => {
+    switch (name) {
+      case "Gattling Gun":
+        return gat;
+      case "Man With No Name":
+        return man;
+      case "Ringo Kid":
+        return ringo;
+      case "Pistol Pete":
+        return pete;
+      case "Buffalo Bill":
+        return bill;
+      case "Billy The Kid":
+        return billy;
+      case "Butch Cassidy":
+        return butch;
+      case "Quick Draw McGraw":
+        return quick;
+      case "Bonnie & Clyde":
+        return bonnie;
+      case "Dolores Abernathy":
+        return delores;
+      case "Calamity Jane":
+        return jane;
+      case "Pony":
+        return pony;
+      case "Stallion":
+        return stallion;
+      case "Donkey":
+        return donkey;
+      case "Bow & Arrow":
+        return bow;
+      case "Rifle":
+        return rifle;
+      case "Revolver":
+        return revolver;
+      case "Dual Revolvers":
+        return dual;
+      case "Baba Looey":
+        return baba;
+      case "Speedy Gonzales":
+        return speedy;
+      default:
+        return;
+    }
+  };
+
   const mapCards = () => {
     if (!cards || cards.status === 404) {
       return;
     }
     return cards.map((uCard) => {
+      let photo = getPhoto(uCard.card.name);
       return (
-        <Card
-          className="card-card"
-          key={`${uCard.id}`}
+        <img
+          className="card-images"
           onClick={() => handleClick(uCard.id, false)}
-        >
-          <Card.Body>
-            <Card.Title>{uCard.card.name}</Card.Title>
-            <Card.Subtitle>Class: {uCard.card.cardClass}</Card.Subtitle>
-            <Card.Text>Attack: {uCard.card.attack}</Card.Text>
-          </Card.Body>
-        </Card>
+          src={photo}
+        ></img>
+        // <Card
+        //   className="card-card"
+        //   key={`${uCard.id}`}
+        //   onClick={() => handleClick(uCard.id, false)}
+        // >
+        //   <Card.Body>
+        //     <Card.Title>{uCard.card.name}</Card.Title>
+        //     <Card.Subtitle>Class: {uCard.card.cardClass}</Card.Subtitle>
+        //     <Card.Text>Attack: {uCard.card.attack}</Card.Text>
+        //   </Card.Body>
+        // </Card>
       );
     });
   };
@@ -39,18 +113,20 @@ const Cards = ({ username, userID, cards, deck, addCards, battles }) => {
       return;
     }
     return deck.map((uCard) => {
+      let photo = getPhoto(uCard.card.name);
       return (
-        <Card
-          className="card-card"
-          key={`${uCard.id}`}
-          onClick={() => handleClick(uCard.id, true)}
-        >
-          <Card.Body>
-            <Card.Title>{uCard.card.name}</Card.Title>
-            <Card.Subtitle>Class: {uCard.card.cardClass}</Card.Subtitle>
-            <Card.Text>Attack: {uCard.card.attack}</Card.Text>
-          </Card.Body>
-        </Card>
+        <img className="card-images" src={photo}></img>
+        // <Card
+        //   className="card-card"
+        //   key={`${uCard.id}`}
+        //   onClick={() => handleClick(uCard.id, true)}
+        // >
+        //   <Card.Body>
+        //     <Card.Title>{uCard.card.name}</Card.Title>
+        //     <Card.Subtitle>Class: {uCard.card.cardClass}</Card.Subtitle>
+        //     <Card.Text>Attack: {uCard.card.attack}</Card.Text>
+        //   </Card.Body>
+        // </Card>
       );
     });
   };
@@ -79,7 +155,7 @@ const Cards = ({ username, userID, cards, deck, addCards, battles }) => {
   };
 
   const getRank = () => {
-    let rank = "Munshkin";
+    let rank = "";
     if (getLevel() <= 2) {
       rank = "Pea Shooter";
     } else if (getLevel() <= 4) {

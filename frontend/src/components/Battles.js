@@ -25,6 +25,26 @@ import {
   addBattle,
   setAddCard,
 } from "./../redux/gwestActions.js";
+import baba from "./../assets/cards/Baba_Looey_Card.png";
+import gat from "./../assets/cards/Gattling_Gun_Card.png";
+import man from "./../assets/cards/No_Name_Card.png";
+import ringo from "./../assets/cards/Ringo_Kid_Card.png";
+import pete from "./../assets/cards/Pistol_Pete_Card.png";
+import bill from "./../assets/cards/Bufflo_Bill_Card.png";
+import billy from "./../assets/cards/Billy_The_Kid_Card.png";
+import butch from "./../assets/cards/Butch_Cassidy_Card.png";
+import quick from "./../assets/cards/quick_Draw_McGraw.png";
+import bonnie from "./../assets/cards/Bonnie_Clyde_Card.png";
+import delores from "./../assets/cards/Dolores_Abernathy_Card.png";
+import jane from "./../assets/cards/Calamity_Jane_Card.png";
+import pony from "./../assets/cards/Pony_Card.png";
+import stallion from "./../assets/cards/Stallion_Card.png";
+import donkey from "./../assets/cards/Donkey_Card.png";
+import bow from "./../assets/cards/Bow_Arrow_Card.png";
+import rifle from "./../assets/cards/Rifle_Card.png";
+import revolver from "./../assets/cards/Revolver_Card.png";
+import dual from "./../assets/cards/Dual_Revolvers.png";
+import speedy from "./../assets/cards/Speedy.png";
 
 const Battles = (props) => {
   useEffect(() => {
@@ -42,6 +62,53 @@ const Battles = (props) => {
       checkWin();
     }
   });
+
+  const getPhoto = (name) => {
+    switch (name) {
+      case "Gattling Gun":
+        return gat;
+      case "Man With No Name":
+        return man;
+      case "Ringo Kid":
+        return ringo;
+      case "Pistol Pete":
+        return pete;
+      case "Buffalo Bill":
+        return bill;
+      case "Billy The Kid":
+        return billy;
+      case "Butch Cassidy":
+        return butch;
+      case "Quick Draw McGraw":
+        return quick;
+      case "Bonnie & Clyde":
+        return bonnie;
+      case "Dolores Abernathy":
+        return delores;
+      case "Calamity Jane":
+        return jane;
+      case "Pony":
+        return pony;
+      case "Stallion":
+        return stallion;
+      case "Donkey":
+        return donkey;
+      case "Bow & Arrow":
+        return bow;
+      case "Rifle":
+        return rifle;
+      case "Revolver":
+        return revolver;
+      case "Dual Revolvers":
+        return dual;
+      case "Baba Looey":
+        return baba;
+      case "Speedy Gonzales":
+        return speedy;
+      default:
+        return;
+    }
+  };
 
   const startGame = () => {
     if (props.inGame) {
@@ -256,48 +323,59 @@ const Battles = (props) => {
 
   const mapUserGame = (area) => {
     return props.userBoard[area].map((card) => {
+      let photo = getPhoto(card.card.name);
       return (
-        <Card className="battle-card" key={`${card.id}`}>
-          <Card.Body>
-            <Card.Text>
-              {card.card.name} Class: {card.card.cardClass} Attack:{" "}
-              {card.card.attack}
-            </Card.Text>
-          </Card.Body>
-        </Card>
+        <img className="card-images" src={photo} key={`$card.id`}></img>
+        // <Card className="battle-card" key={`${card.id}`}>
+        //   <Card.Body>
+        //     <Card.Text>
+        //       {card.card.name} Class: {card.card.cardClass} Attack:{" "}
+        //       {card.card.attack}
+        //     </Card.Text>
+        //   </Card.Body>
+        // </Card>
       );
     });
   };
 
   const mapAIGame = (area) => {
     return props.aiBoard[area].map((card) => {
+      let photo = getPhoto(card.name);
       return (
-        <Card className="battle-card" key={`${card.id}`}>
-          <Card.Body>
-            <Card.Text>
-              {card.name} Class: {card.cardClass} Attack: {card.attack}
-            </Card.Text>
-          </Card.Body>
-        </Card>
+        <img className="card-images" src={photo} key={`$card.id`}></img>
+        // <Card className="battle-card" key={`${card.id}`}>
+        //   <Card.Body>
+        //     <Card.Text>
+        //       {card.name} Class: {card.cardClass} Attack: {card.attack}
+        //     </Card.Text>
+        //   </Card.Body>
+        // </Card>
       );
     });
   };
 
   const mapCardsAvailable = () => {
     return props.userCardsAvailable.map((card) => {
+      let photo = getPhoto(card.card.name);
       return (
-        <Card
-          className="battle-card"
-          key={`${card.id}`}
+        <img
+          className="card-images"
           onClick={(e) => startTurn(e, card)}
-        >
-          <Card.Body>
-            <Card.Text>
-              {card.card.name} Class: {card.card.cardClass} Attack:{" "}
-              {card.card.attack}
-            </Card.Text>
-          </Card.Body>
-        </Card>
+          src={photo}
+          key={`$card.id`}
+        ></img>
+        // <Card
+        //   className="battle-card"
+        //   key={`${card.id}`}
+        //   onClick={(e) => startTurn(e, card)}
+        // >
+        //   <Card.Body>
+        //     <Card.Text>
+        //       {card.card.name} Class: {card.card.cardClass} Attack:{" "}
+        //       {card.card.attack}
+        //     </Card.Text>
+        //   </Card.Body>
+        // </Card>
       );
     });
   };
@@ -342,14 +420,15 @@ const Battles = (props) => {
         <div className="board">
           <div className="left-board">
             <div className="ai-stat-board">
-              <p>
+              <h4>
                 Sherriff: {props.battle.ai_name ? props.battle.ai_name : ""}
-              </p>
+              </h4>
+              <p>Points: {props.aiPoints}</p>
+              <p>Cards left: {props.aiCardsAvailable.length}</p>
               <p>
                 Wins:{" "}
                 {props.round1Win === "ai" || props.round2Win === "ai" ? 1 : 0}
               </p>
-              <p>Cards left: {props.aiCardsAvailable.length}</p>
             </div>
             {/* <div>
               <p>weather cards</p>
@@ -357,16 +436,18 @@ const Battles = (props) => {
             <button className="pass-button" onClick={userPass}>
               Pass
             </button>
-            <div className="user-stat-board">
+            <div className="user-stat-board" style={{ display: "fixed" }}>
               <h4>{props.username}</h4>
+              <p>Points: {props.userPoints}</p>
+              <p>Cards left: {props.userCardsAvailable.length}</p>
               <p>
+                <br />
                 Wins:{" "}
                 {props.round1Win === props.username ||
                 props.round2Win === props.username
                   ? 1
                   : 0}
               </p>
-              <p>Cards left: {props.userCardsAvailable.length}</p>
             </div>
           </div>
           <div className="game-board">
@@ -412,7 +493,8 @@ const Battles = (props) => {
                 <div
                   style={{
                     border: "5px solid black",
-                    display: "flex",
+                    display: "block",
+                    textAlign: "center",
                   }}
                 >
                   {mapCardsAvailable()}

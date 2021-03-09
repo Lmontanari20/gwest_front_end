@@ -168,22 +168,27 @@ code {
 .ai-stat-board {
   border: 3px solid rgba(70, 42, 1, 1);
   border-radius: 15px;
-  width: 50%;
+  position: fixed;
+  width: 25%;
   background-color: rgb(240, 209, 163, 0.8);
 }
 
 .pass-button {
   margin-top: 100px;
   margin-bottom: 100px;
+  position: fixed;
   border-color: rgba(70, 42, 1, 1);
   border-radius: 15px;
+  margin-top: 190px;
   background-color: rgb(240, 209, 163, 0.8);
 }
 
 .user-stat-board {
   border: 3px solid rgba(70, 42, 1, 1);
+  position: fixed;
   border-radius: 15px;
-  width: 50%;
+  width: 25%;
+  margin-top: 250px;
   background-color: rgb(240, 209, 163, 0.8);
 }
 
@@ -201,7 +206,16 @@ code {
 .user-melee,
 .user-range,
 .user-siege {
-  display: "flex";
+  display: block;
+  text-align: center;
   border: 3px solid rgba(70, 42, 1, 1);
-  height: 75px;
+  max-height: 200px;
+  height: auto;
+}
+
+.card-images {
+  max-height: 200px;
+  max-width: 110px;
+  height: auto;
+  width: auto;
 }
