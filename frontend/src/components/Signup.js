@@ -20,7 +20,6 @@ const Signup = (props) => {
     })
       .then((resp) => resp.json())
       .then((data) => {
-        debugger;
         // if data.username else if data.error
         props.login(data.username, data.id);
         localStorage.setItem("token", data.token);

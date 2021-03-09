@@ -17,7 +17,6 @@ const Record = (props) => {
 
   const mapBattlesToCards = () => {
     let battles = props.battles;
-    debugger;
     if (battles.length == 0) {
       return;
     }

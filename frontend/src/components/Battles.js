@@ -242,7 +242,6 @@ const Battles = (props) => {
   };
 
   const postBattle = (win) => {
-    debugger;
     if (props.round1Score === null) {
       props.history.push("/record");
       return;

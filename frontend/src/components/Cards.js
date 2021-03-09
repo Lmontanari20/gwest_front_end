@@ -115,7 +115,11 @@ const Cards = ({ username, userID, cards, deck, addCards, battles }) => {
     return deck.map((uCard) => {
       let photo = getPhoto(uCard.card.name);
       return (
-        <img className="card-images" src={photo}></img>
+        <img
+          className="card-images"
+          onClick={() => handleClick(uCard.id, true)}
+          src={photo}
+        ></img>
         // <Card
         //   className="card-card"
         //   key={`${uCard.id}`}
@@ -132,6 +136,7 @@ const Cards = ({ username, userID, cards, deck, addCards, battles }) => {
   };
 
   const handleClick = (id, deckCard) => {
+    debugger;
     if (deckCard && deck.length <= 10) {
       return alert("You need atleast 10 cards in your deck at all times.");
     }
