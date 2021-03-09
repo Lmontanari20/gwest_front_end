@@ -19,6 +19,7 @@ code {
 .Login,
 .Signup {
   border: 3px solid rgba(70, 42, 1, 1);
+  border-radius: 15px;
   width: 20%;
   background-color: rgb(240, 209, 163, 0.8);
   text-align: center;
@@ -33,6 +34,7 @@ code {
   margin-top: 50px;
   border-width: 3px;
   border-color: rgba(70, 42, 1, 1);
+  border-radius: 15px;
 }
 
 .card-card.card {
@@ -50,6 +52,7 @@ code {
 .record-label {
   background-color: rgba(240, 209, 163);
   border: 3px solid rgba(70, 42, 1, 1);
+  border-radius: 15px;
   text-align: center;
   margin: auto;
   margin-top: 25px;
@@ -76,9 +79,29 @@ code {
   margin-right: auto;
 }
 
+.your-card-header,
+.card-profile-header,
+.your-deck-header {
+  background-color: rgba(240, 209, 163);
+  opacity: 0.8;
+  border: 3px solid rgba(70, 42, 1, 1);
+  border-radius: 15px;
+  margin-top: 25px;
+  width: 75%;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.card-profile-header {
+  position: fixed;
+  width: 25%;
+  margin-left: 100px;
+}
+
 .home {
   background-color: rgb(240, 209, 163, 0.8);
   border: 3px solid rgba(70, 42, 1, 1);
+  border-radius: 15px;
   width: 60%;
   text-align: center;
   margin-left: auto;
@@ -112,6 +135,9 @@ code {
   margin: auto;
   flex: 1;
 }
+.battle-card.card {
+  background-color: rgb(240, 209, 163, 0.8);
+}
 
 .logo {
   width: 50%;
@@ -120,6 +146,7 @@ code {
 
 .game-start {
   border: 3px solid rgba(70, 42, 1, 1);
+  border-radius: 15px;
   width: 25%;
   margin-left: auto;
   margin-right: auto;
@@ -139,6 +166,7 @@ code {
 
 .ai-stat-board {
   border: 3px solid rgba(70, 42, 1, 1);
+  border-radius: 15px;
   width: 50%;
   background-color: rgb(240, 209, 163, 0.8);
 }
@@ -147,11 +175,13 @@ code {
   margin-top: 100px;
   margin-bottom: 100px;
   border-color: rgba(70, 42, 1, 1);
+  border-radius: 15px;
   background-color: rgb(240, 209, 163, 0.8);
 }
 
 .user-stat-board {
   border: 3px solid rgba(70, 42, 1, 1);
+  border-radius: 15px;
   width: 50%;
   background-color: rgb(240, 209, 163, 0.8);
 }
@@ -159,6 +189,9 @@ code {
 .game-board {
   background-color: rgb(240, 209, 163, 0.8);
   border: 3px solid rgba(70, 42, 1, 1);
+  flex-basis: 1300px;
+  flex-shrink: 1;
+  border-radius: 15px;
 }
 
 .ai-melee,

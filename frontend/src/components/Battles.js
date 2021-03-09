@@ -331,11 +331,13 @@ const Battles = (props) => {
   };
   return (
     <div>
-      <div className="game-start">
-        <h2>Wild Wild Gwest Event</h2>
-        <h5>Make sure you put cards in your deck!!</h5>
-        <button onClick={startGame}>Play</button>
-      </div>
+      {!props.inGame && (
+        <div className="game-start">
+          <h2>Wild Wild Gwest Event</h2>
+          <h5>Make sure you put cards in your deck!!</h5>
+          <button onClick={startGame}>Play</button>
+        </div>
+      )}
       {props.inGame && (
         <div className="board">
           <div className="left-board">

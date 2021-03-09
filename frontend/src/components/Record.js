@@ -62,7 +62,7 @@ const Record = (props) => {
   return (
     <Fragment>
       <div className="record-label">
-        <h2 className="recordH2">Record</h2>
+        <h2 className="recordH2">Record:</h2>
         <p>Wins: {getWins()}</p>
         <p>Losses: {getLosses()}</p>
       </div>

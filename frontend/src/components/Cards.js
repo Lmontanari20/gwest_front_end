@@ -4,7 +4,7 @@ import { Card } from "react-bootstrap";
 import { connect } from "react-redux";
 import { addCards } from "./../redux/gwestActions.js";
 
-const Cards = ({ username, userID, cards, deck, addCards }) => {
+const Cards = ({ username, userID, cards, deck, addCards, battles }) => {
   useEffect(() => {
     fetch(`http://localhost:3000/card/${userID}`, {
       headers: { "Authorization": `Bearer ${localStorage.token}` },
@@ -73,17 +73,46 @@ const Cards = ({ username, userID, cards, deck, addCards }) => {
       });
   };
 
+  const getLevel = () => {
+    let wins = battles.filter((battle) => battle.win);
+    return parseInt(wins.length / 3);
+  };
+
+  const getRank = () => {
+    let rank = "Munshkin";
+    if (getLevel() <= 2) {
+      rank = "Pea Shooter";
+    } else if (getLevel() <= 4) {
+      rank = "Outlaw";
+    } else if (getLevel() <= 6) {
+      rank = "Bank Robber";
+    } else if (getLevel() <= 8) {
+      rank = "Sherriff Terrorizer";
+    } else {
+      rank = "Gwest's Most Wanted";
+    }
+    return rank;
+  };
+
   return (
     <div style={{ display: "flex" }}>
       <div className="your-cards">
-        <h2>All Cards ({cards.length})</h2>
+        <div className="your-card-header">
+          <h2>All Cards ({cards.length})</h2>
+        </div>
         {mapCards()}
       </div>
       <div className="card-profile">
-        <h4>Username: {username}</h4>
+        <div className="card-profile-header">
+          <h4>Username: {username}</h4>
+          <h5>Level: {getLevel()}</h5>
+          <h5>Rank: {getRank()}</h5>
+        </div>
       </div>
       <div className="your-deck">
-        <h2>Cards in Deck ({deck.length})</h2>
+        <div className="your-deck-header">
+          <h2>Cards in Deck ({deck.length})</h2>
+        </div>
         {mapDeck()}
       </div>
     </div>
