@@ -60,12 +60,39 @@ const Record = (props) => {
     return losses.length;
   };
 
+  const getLevel = () => {
+    let wins = props.battles.filter((battle) => battle.win);
+    return parseInt(wins.length / 3);
+  };
+
+  const getRank = () => {
+    let rank = "";
+    if (getLevel() <= 2) {
+      rank = "Pea Shooter";
+    } else if (getLevel() <= 4) {
+      rank = "Outlaw";
+    } else if (getLevel() <= 6) {
+      rank = "Bank Robber";
+    } else if (getLevel() <= 8) {
+      rank = "Sherriff Terrorizer";
+    } else {
+      rank = "Gwest's Most Wanted";
+    }
+    return rank;
+  };
+
   return (
     <Fragment>
       <div className="record-label">
-        <h2 className="recordH2">Record:</h2>
-        <p>Wins: {getWins()}</p>
-        <p>Losses: {getLosses()}</p>
+        <h2 className="recordH2">{props.username}</h2>
+        <h5>
+          Level: {getLevel()} <br />
+          Rank: {getRank()}
+        </h5>
+        <h5>
+          Wins: {getWins()} <br />
+          Losses: {getLosses()}
+        </h5>
         {props.battles.length == 0 && (
           <h5>You do not have a record yet! Set your deck and go play!</h5>
         )}

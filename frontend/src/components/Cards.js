@@ -150,6 +150,7 @@ const Cards = ({ username, userID, cards, deck, addCards, battles }) => {
     })
       .then((res) => res.json())
       .then((cards) => {
+        debugger;
         addCards(cards);
       });
   };
