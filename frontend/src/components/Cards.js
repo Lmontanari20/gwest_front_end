@@ -137,8 +137,8 @@ const Cards = ({ username, userID, cards, deck, addCards, battles }) => {
 
   const handleClick = (id, deckCard) => {
     debugger;
-    if (deckCard && deck.length <= 10) {
-      return alert("You need atleast 10 cards in your deck at all times.");
+    if (deckCard && deck.length <= 12) {
+      return alert("You need atleast 12 cards in your deck at all times.");
     }
     fetch(`http://localhost:3000/card/${userID}/${id}`, {
       method: "PATCH",

@@ -11,7 +11,9 @@ const Record = (props) => {
     })
       .then((res) => res.json())
       .then((battles) => {
-        props.addBattles(battles.reverse());
+        if (battles !== 0) {
+          props.addBattles(battles.reverse());
+        }
       });
   }, []);
 
@@ -64,12 +66,13 @@ const Record = (props) => {
         <h2 className="recordH2">Record:</h2>
         <p>Wins: {getWins()}</p>
         <p>Losses: {getLosses()}</p>
+        {props.battles.length == 0 && (
+          <h5>You do not have a record yet! Set your deck and go play!</h5>
+        )}
       </div>
       <br></br>
-      {props.battles.length != 0 ? (
+      {props.battles.length != 0 && (
         <div className="recordDiv">{mapBattlesToCards()}</div>
-      ) : (
-        <h4>You do not have a record yet! Set your deck and go play!</h4>
       )}
     </Fragment>
   );

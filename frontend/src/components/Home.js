@@ -7,11 +7,11 @@ const home = (props) => {
       <h4>Login or Signup to play!</h4>
       <h5>Rules:</h5>
       <p>
-        When you create an account you will be given 10 cards to start out with.
+        When you create an account you will be given 12 cards to start out with.
       </p>
       <p>
-        You will need to put these cards in your deck to play(you have to have
-        at least 10 cards in your deck to play.
+        You will need to put these cards in your deck to play (you have to have
+        at least 12 cards in your deck to play).
       </p>
       <p>You can play once you hit the battle tab.</p>
       <p>

@@ -25,10 +25,10 @@ const NavBar = (props) => {
             {props.username !== null && (
               <Fragment>
                 <LinkContainer exact to="/battles">
-                  <Nav.Link>Battles</Nav.Link>
+                  <Nav.Link>Play</Nav.Link>
                 </LinkContainer>
                 <LinkContainer exact to="/cards">
-                  <Nav.Link>Cards</Nav.Link>
+                  <Nav.Link>Deck</Nav.Link>
                 </LinkContainer>
                 <LinkContainer exact to="/record">
                   <Nav.Link>Record</Nav.Link>

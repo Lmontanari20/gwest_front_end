@@ -218,4 +218,6 @@ code {
   max-width: 110px;
   height: auto;
   width: auto;
+  border-radius: 12px;
+  border: 2px solid rgba(70, 42, 1, 1);
 }

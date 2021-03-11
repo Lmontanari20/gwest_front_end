@@ -1,7 +1,6 @@
 import React, { Fragment, useEffect } from "react";
 import { connect } from "react-redux";
 import "./../index.css";
-import { Card } from "react-bootstrap";
 import {
   addBattles,
   aiDeck,
@@ -50,7 +49,6 @@ const Battles = (props) => {
   useEffect(() => {
     if (props.userPass && !props.aiPass) {
       aiTurn();
-      // setTimeout(() => aiTurn(), 2000);
     }
     if (props.userPass && props.aiPass) {
       checkRoundEnd();
@@ -110,6 +108,7 @@ const Battles = (props) => {
     }
   };
 
+  // called when clicked play, sets up game and fetches a new battle
   const startGame = () => {
     if (props.inGame) {
       return;
@@ -129,12 +128,15 @@ const Battles = (props) => {
       .then((battle) => {
         props.addBattle(battle);
       });
-    // render ai board,
-    // render user board and user cards available with onclick function
   };
 
+  // function that makes the ai have a turn
   const aiTurn = () => {
     checkRoundEnd();
+    if (props.aiPass) {
+      checkRoundEnd();
+      return;
+    }
     if (props.aiCardsAvailable.length === 0) {
       props.setAIPass(true);
       checkRoundEnd();
@@ -142,6 +144,16 @@ const Battles = (props) => {
     }
     if (props.userPass && props.userPoints < props.aiPoints) {
       // make ai pass
+      props.setAIPass(true);
+      checkRoundEnd();
+    } else if (props.aiPoints - props.userPoints > 5) {
+      props.setAIPass(true);
+      checkRoundEnd();
+    } else if (
+      props.aiCardsAvailable.length === 1 &&
+      props.round1Win === "ai" &&
+      props.round2Win === null
+    ) {
       props.setAIPass(true);
       checkRoundEnd();
     } else {
@@ -162,13 +174,12 @@ const Battles = (props) => {
       props.aiAvailable(newAvailable);
       // set points and change turn to users turn
       props.setAIPoints(props.aiPoints + card.attack);
-      // if (props.userPass) {
-      //   aiTurn();
-      // }
     }
   };
 
+  // called when ever the user selects a card to play
   const startTurn = (e, card) => {
+    debugger;
     if (!props.userTurn) {
       return;
     }
@@ -179,15 +190,15 @@ const Battles = (props) => {
     props.changeUserBoard(newBoard);
     // remove card from available
     let newAvailable = props.userCardsAvailable.filter(
-      (uCard) => uCard.card.id !== card.card.id
+      (uCard) => uCard.id !== card.id
     );
     props.cardsAvailable(newAvailable);
     //set user points
     props.setUserPoints(props.userPoints + card.card.attack);
-    // setTimeout(() => aiTurn(), 2000);
     aiTurn();
   };
 
+  // checks to see if the round has ended
   const checkRoundEnd = () => {
     if (
       (props.userPass && props.aiPass) ||
@@ -200,6 +211,7 @@ const Battles = (props) => {
     }
   };
 
+  // checks to see if there is a winner in the game
   const checkWin = () => {
     // check to see if there is a game winner
     let win;
@@ -231,6 +243,7 @@ const Battles = (props) => {
     }
   };
 
+  // post fetch to add a new card to the users deck
   const addNewCard = () => {
     fetch(`http://localhost:3000/card/${props.userID}`, {
       method: "POST",
@@ -241,6 +254,7 @@ const Battles = (props) => {
     });
   };
 
+  // patch fetch to update the battle with all of the attributes when the game is over
   const postBattle = (win) => {
     if (props.round1Score === null) {
       props.history.push("/record");
@@ -265,6 +279,7 @@ const Battles = (props) => {
     });
   };
 
+  // resets all the game states after the game is finished
   const resetGame = () => {
     props.setAIPoints(0);
     props.endGame();
@@ -281,6 +296,7 @@ const Battles = (props) => {
     props.set3Win(null);
   };
 
+  // sets the next round when a round is finished
   const setNextRound = () => {
     let winner = "";
     if (props.aiPoints >= props.userPoints) {
@@ -309,6 +325,7 @@ const Battles = (props) => {
     props.setAIPass(false);
   };
 
+  // gets the cards available for the user
   const getCardsAvailable = () => {
     let available = [];
     while (available.length < 10) {
@@ -320,39 +337,23 @@ const Battles = (props) => {
     props.cardsAvailable(available);
   };
 
+  // maps the cards for the user board when it is played
   const mapUserGame = (area) => {
     return props.userBoard[area].map((card) => {
       let photo = getPhoto(card.card.name);
-      return (
-        <img className="card-images" src={photo} key={`$card.id`}></img>
-        // <Card className="battle-card" key={`${card.id}`}>
-        //   <Card.Body>
-        //     <Card.Text>
-        //       {card.card.name} Class: {card.card.cardClass} Attack:{" "}
-        //       {card.card.attack}
-        //     </Card.Text>
-        //   </Card.Body>
-        // </Card>
-      );
+      return <img className="card-images" src={photo} key={`$card.id`}></img>;
     });
   };
 
+  // maps through the ai cards played and displays them on the ai board
   const mapAIGame = (area) => {
     return props.aiBoard[area].map((card) => {
       let photo = getPhoto(card.name);
-      return (
-        <img className="card-images" src={photo} key={`$card.id`}></img>
-        // <Card className="battle-card" key={`${card.id}`}>
-        //   <Card.Body>
-        //     <Card.Text>
-        //       {card.name} Class: {card.cardClass} Attack: {card.attack}
-        //     </Card.Text>
-        //   </Card.Body>
-        // </Card>
-      );
+      return <img className="card-images" src={photo} key={`$card.id`}></img>;
     });
   };
 
+  // maps the cards that are available for the user to play with
   const mapCardsAvailable = () => {
     return props.userCardsAvailable.map((card) => {
       let photo = getPhoto(card.card.name);
@@ -363,22 +364,11 @@ const Battles = (props) => {
           src={photo}
           key={`$card.id`}
         ></img>
-        // <Card
-        //   className="battle-card"
-        //   key={`${card.id}`}
-        //   onClick={(e) => startTurn(e, card)}
-        // >
-        //   <Card.Body>
-        //     <Card.Text>
-        //       {card.card.name} Class: {card.card.cardClass} Attack:{" "}
-        //       {card.card.attack}
-        //     </Card.Text>
-        //   </Card.Body>
-        // </Card>
       );
     });
   };
 
+  // gets the ai deck that it can play with
   const getAIDECK = () => {
     fetch("http://localhost:3000/card/ai/deck", {
       headers: { "Authorization": `Bearer ${localStorage.token}` },
@@ -390,6 +380,7 @@ const Battles = (props) => {
       });
   };
 
+  // sets the ai cards that are available to use
   const getAICARDS = (cards) => {
     // random cards array length 10
     let available = [];
@@ -402,6 +393,7 @@ const Battles = (props) => {
     props.aiAvailable(available);
   };
 
+  // when a user clicks the pass button this is called to set the userPass
   const userPass = () => {
     props.setUserPass(true);
     checkWin();
@@ -457,17 +449,13 @@ const Battles = (props) => {
               </h3>
               <div>
                 Melee
-                <div className="ai-melee" style={{ display: "flex" }}>
+                <div className="ai-melee" star>
                   {mapAIGame("melee")}
                 </div>
                 Range
-                <div className="ai-range" style={{ display: "flex" }}>
-                  {mapAIGame("ranged")}
-                </div>
+                <div className="ai-range">{mapAIGame("ranged")}</div>
                 Siege
-                <div className="ai-siege" style={{ display: "flex" }}>
-                  {mapAIGame("siege")}
-                </div>
+                <div className="ai-siege">{mapAIGame("siege")}</div>
               </div>
             </div>
             <div>
@@ -477,21 +465,15 @@ const Battles = (props) => {
               </h3>
               <div>
                 Melee
-                <div className="user-melee" style={{ display: "flex" }}>
-                  {mapUserGame("melee")}
-                </div>
+                <div className="user-melee">{mapUserGame("melee")}</div>
                 Range
-                <div className="user-range" style={{ display: "flex" }}>
-                  {mapUserGame("ranged")}
-                </div>
+                <div className="user-range">{mapUserGame("ranged")}</div>
                 Siege
-                <div className="user-siege" style={{ display: "flex" }}>
-                  {mapUserGame("siege")}
-                </div>
+                <div className="user-siege">{mapUserGame("siege")}</div>
                 Cards Available
                 <div
                   style={{
-                    border: "5px solid black",
+                    border: "3px solid rgba(70,42,1,1)",
                     display: "block",
                     textAlign: "center",
                   }}
@@ -501,53 +483,6 @@ const Battles = (props) => {
               </div>
             </div>
           </div>
-
-          {/* <div style={{ flex: "1" }}>
-            <div style={{ display: "flex" }}>
-              <div
-                style={{
-                  flex: "1",
-                  border: "3px solid black",
-                  width: "100px",
-                  marginLeft: "200px",
-                }}
-              >
-                discard
-              </div>
-              <div
-                style={{
-                  flex: "1",
-                  border: "3px solid black",
-                  width: "100px",
-                  marginRight: "200px",
-                }}
-              >
-                deck
-              </div>
-            </div>
-            <div style={{ display: "flex", marginTop: "500px" }}>
-              <div
-                style={{
-                  flex: "1",
-                  border: "3px solid black",
-                  width: "100px",
-                  marginLeft: "200px",
-                }}
-              >
-                discard
-              </div>
-              <div
-                style={{
-                  flex: "1",
-                  border: "3px solid black",
-                  width: "100px",
-                  marginRight: "200px",
-                }}
-              >
-                deck
-              </div>
-            </div>
-          </div> */}
         </div>
       )}
     </div>
