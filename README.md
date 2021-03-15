@@ -11,9 +11,12 @@ You will need a package manager like NPM to install the required packages.
 To install, fork this repository as well as the back-end repository. Follow the instructions for the back-end, then in the front-end run npm install. Once the packages have installed, run npm start to start the localhost server. Make sure you run the backend first.
 
 ### Contact Information
-- [LinkedIn](https://www.linkedin.com/in/lucas-montanari20/)
-- [GitHub](https://github.com/Lmontanari20)
-- Email: Lmonty2011@gmail.com
+* [LinkedIn](https://www.linkedin.com/in/lucas-montanari20/)
+* [GitHub](https://github.com/Lmontanari20)
+* Email: Lmonty2011@gmail.com
+
+### Demo
+* [Youtube Demo](https://youtu.be/b31CkQk15m0)
 
 ### License
 This project uses the following license: Learn.co Educational Content License.
