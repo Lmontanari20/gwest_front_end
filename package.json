@@ -1,0 +1,10 @@
+{
+  "homepage": "http://Lmontanari20.github.io/gwest_front_end",
+  "scripts": {
+    "predeploy": "npm run build",
+    "deploy": "gh-pages -d build"
+  },
+  "devDependencies": {
+    "gh-pages": "^3.2.0"
+  }
+}
