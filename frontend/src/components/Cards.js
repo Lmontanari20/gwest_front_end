@@ -27,7 +27,7 @@ import speedy from "./../assets/cards/Speedy.png";
 
 const Cards = ({ username, userID, cards, deck, addCards, battles }) => {
   useEffect(() => {
-    fetch(`http://localhost:3000/card/${userID}`, {
+    fetch(`https://wild-wild-gwest.herokuapp.com/card/${userID}`, {
       headers: { "Authorization": `Bearer ${localStorage.token}` },
     })
       .then((res) => res.json())
@@ -140,7 +140,7 @@ const Cards = ({ username, userID, cards, deck, addCards, battles }) => {
     if (deckCard && deck.length <= 12) {
       return alert("You need atleast 12 cards in your deck at all times.");
     }
-    fetch(`http://localhost:3000/card/${userID}/${id}`, {
+    fetch(`https://wild-wild-gwest.herokuapp.com/card/${userID}/${id}`, {
       method: "PATCH",
       headers: {
         "Content-Type": "application/json",

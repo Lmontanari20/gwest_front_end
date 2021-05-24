@@ -6,7 +6,7 @@ const Login = (props) => {
   // function that handles the login functionality
   const handleLogin = (e) => {
     e.preventDefault();
-    fetch("http://localhost:3000/login", {
+    fetch("https://wild-wild-gwest.herokuapp.com/login", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",

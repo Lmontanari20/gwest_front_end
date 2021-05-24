@@ -121,7 +121,7 @@ const Battles = (props) => {
     props.setAddCard(true);
 
     props.startGame();
-    fetch(`http://localhost:3000/battle/new/${props.userID}`, {
+    fetch(`https://wild-wild-gwest.herokuapp.com/battle/new/${props.userID}`, {
       headers: { "Authorization": `Bearer ${localStorage.token}` },
     })
       .then((res) => res.json())
@@ -245,7 +245,7 @@ const Battles = (props) => {
 
   // post fetch to add a new card to the users deck
   const addNewCard = () => {
-    fetch(`http://localhost:3000/card/${props.userID}`, {
+    fetch(`https://wild-wild-gwest.herokuapp.com/card/${props.userID}`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -260,7 +260,7 @@ const Battles = (props) => {
       props.history.push("/record");
       return;
     }
-    fetch(`http://localhost:3000/battle/${props.battle.id}`, {
+    fetch(`https://wild-wild-gwest.herokuapp.com/battle/${props.battle.id}`, {
       method: "PATCH",
       headers: {
         "Content-Type": "application/json",
@@ -370,7 +370,7 @@ const Battles = (props) => {
 
   // gets the ai deck that it can play with
   const getAIDECK = () => {
-    fetch("http://localhost:3000/card/ai/deck", {
+    fetch("https://wild-wild-gwest.herokuapp.com/card/ai/deck", {
       headers: { "Authorization": `Bearer ${localStorage.token}` },
     })
       .then((res) => res.json())

@@ -6,7 +6,7 @@ import { Card } from "react-bootstrap";
 
 const Record = (props) => {
   useEffect(() => {
-    fetch(`http://localhost:3000/battle/${props.userID}`, {
+    fetch(`https://wild-wild-gwest.herokuapp.com/battle/${props.userID}`, {
       headers: { "Authorization": `Bearer ${localStorage.token}` },
     })
       .then((res) => res.json())

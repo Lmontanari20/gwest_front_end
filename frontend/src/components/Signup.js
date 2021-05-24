@@ -10,7 +10,7 @@ const Signup = (props) => {
       username: e.target.username.value,
       password: e.target.password.value,
     };
-    fetch("http://localhost:3000/signup", {
+    fetch("https://wild-wild-gwest.herokuapp.com/signup", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
